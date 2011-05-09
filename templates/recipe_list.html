@@ -1,0 +1,12 @@
+{% extends 'base_plain.html' %}
+
+{% block content %}
+	
+	<h2>Recipes</h2>
+	<ul>
+	{% for recipe in recipes %}
+		<li><a href="/recipe?key={{ recipe.key }}">{{ recipe.name }}</a></li>
+	{% endfor %}
+	</ul>
+
+{% endblock %}

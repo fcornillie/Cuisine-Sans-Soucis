@@ -1,0 +1,15 @@
+{% extends 'base_plain.html' %}
+
+{% block content %}
+
+	<div id="recipe">
+		<h2>{{ recipe.name }}</h2>
+		{{ recipe.teaser }}
+		<br/>{{ recipe.recipe }}
+		<br/>{{ recipe.ingredients }}
+		<br/>{{ recipe.foodtypes }}
+		<br/>{{ recipe.author }}
+		<br/>{{ recipe.timestamp }}
+	</div>
+	
+{% endblock %}
