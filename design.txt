@@ -18,3 +18,8 @@ cuisine machine *
 cookery agent
 
 * already taken
+
+2. todo
+- pictures of recipes
+- social validation of cooking & preparation time // competition game?
+
