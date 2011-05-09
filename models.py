@@ -77,8 +77,11 @@ class User(db.Model):
 class Recipe(db.Model):
 	name = db.StringProperty()
 	teaser = db.StringProperty()
-	recipe = db.TextProperty()
-	ingredients = db.ListProperty(db.Key)
+	ingredients = db.TextProperty()
+	method = db.TextProperty()
+	preparation_time = db.IntegerProperty()
+	cooking_time = db.IntegerProperty()
+	ingredients_list = db.ListProperty(db.Key)
 	foodtypes = db.ListProperty(db.Key)
 	author = db.ReferenceProperty(User)
 	timestamp = db.DateTimeProperty(auto_now_add=True)
