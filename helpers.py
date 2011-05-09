@@ -12,7 +12,7 @@ from models import *
 def get_current_user():
 	user_query = User.gql("WHERE user = :1", users.get_current_user())
 	if user_query.count() > 0:
-		player = user_query[0]
+		user = user_query[0]
 		return user
 	else:
 		return None
