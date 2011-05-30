@@ -1,9 +1,10 @@
 {% extends 'base_plain.html' %}
 
 {% block content %}
-
 	<div id="recipe">
-		<h2>{{ recipe.name }}</h2>
+	<h2>Recipe</h2>
+	{% if recipe %}
+	<h3>{{ recipe.name }}</h3>
 		{{ recipe.teaser }}
 		<br/>{{ recipe.preparation_time }} | {{ recipe.cooking_time }}
 		<br/>{{ recipe.ingredients }}
@@ -11,6 +12,17 @@
 		<br/>{{ recipe.foodtypes }}
 		<br/>{{ recipe.author.nickname }}
 		<br/>{{ recipe.timestamp }}
+	{% else %}
+		<form name="recipe" action="/recipe" method="post">
+			<input name="name" id="name" type="text" value="Recipe name here ..." />
+			<br/><input name="teaser" id="teaser" type="text" value="Teaser here ..." />
+			<br/><select name="type" id="type"><option value="starter">starter</option><option value="main">main course</option><option value="dessert">dessert</option></select>
+			<br/><input name="preparation_time" id="preparation_time" type="text" value="Preparation time" /> | <input name="cooking_time" id="cooking_time" type="text" value="Cooking time" />
+			<br/><textarea name="ingredients" id="ingredients" rows="10" cols="80">Ingredients here ...</textarea>
+			<br/><textarea name="method" id="method" type="text" rows="15" cols="80">Method here ...</textarea>
+			<br/>Picture: <input type="file" name="pic" id="pic" accept="image/png, image/jpeg" />
+			<br/><input type="submit" />
+	{% endif %}
 	</div>
 	
 {% endblock %}

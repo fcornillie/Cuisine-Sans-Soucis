@@ -75,7 +75,7 @@ class User(db.Model):
 				return False
 
 class Recipe(db.Model):
-	type = db.StringProperty()	# choices: 'starter', 'main', 'dessert'
+	type = db.StringProperty(choices=set(["starter", "main", "dessert"]))
 	name = db.StringProperty()
 	teaser = db.StringProperty()
 	ingredients = db.TextProperty()
@@ -84,7 +84,7 @@ class Recipe(db.Model):
 	cooking_time = db.IntegerProperty()
 	ingredients_list = db.ListProperty(db.Key)
 	foodtypes = db.ListProperty(db.Key)
-	author = db.ReferenceProperty(User)
+	author = db.ReferenceProperty(User, collection_name="recipes")
 	picture = db.BlobProperty()
 	season = db.StringProperty()
 	timestamp = db.DateTimeProperty(auto_now_add=True)

@@ -1,6 +1,8 @@
 # Author: Frederik Cornillie <frederik.cornillie@gmail.com>
 # Created: May 9th, 2011
 
+import logging
+
 from google.appengine.api import users
 
 from models import *
@@ -13,9 +15,11 @@ def get_current_user():
 	user_query = User.gql("WHERE user = :1", users.get_current_user())
 	if user_query.count() > 0:
 		user = user_query[0]
-		return user
 	else:
-		return None
+		user = User(user=users.get_current_user())
+		user.put()
+		
+	return user
 
 def append_base_template_values(template_values):
 	"""

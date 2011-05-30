@@ -16,7 +16,9 @@
 			{% endblock %}
 		</div>
 		<div id="content">
-			{% block content %}{% endblock %}
+			<div id="profile">{% block profile %}{% include 'profile.html' %}{% endblock %}</div>
+			
+			<div id="content_main">{% block content %}{% endblock %}</div>
 		</div>
 	</div>
 </body>

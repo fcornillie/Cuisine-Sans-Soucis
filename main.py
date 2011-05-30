@@ -25,8 +25,10 @@ from google.appengine.ext.webapp import util
 from google.appengine.ext.webapp.util import login_required
 from google.appengine.api import users
 from models import *
+from helpers import *
 
 class MainHandler(webapp.RequestHandler):
+	@login_required
 	def get(self):
 		
 		template_values = {
@@ -34,32 +36,44 @@ class MainHandler(webapp.RequestHandler):
 		}
 		
 		path = os.path.join(os.path.dirname(__file__), 'templates/recipe_list.html')
-		self.response.out.write(template.render(path, template_values))
+		self.response.out.write(template.render(path, append_base_template_values(template_values)))
 
-class get_recipe(webapp.RequestHandler):
+class recipe_detail(webapp.RequestHandler):
+	@login_required
 	def get(self):
-		recipe = Recipe.get(self.request.get('key'))
-		
+		if self.request.get('key'):
+			recipe = Recipe.get(self.request.get('key'))
+		else:
+			recipe = None
+			
 		template_values = {
 			'recipe':recipe,
 		}
 		
 		path = os.path.join(os.path.dirname(__file__), 'templates/recipe_detail.html')
-		self.response.out.write(template.render(path, template_values))
+		self.response.out.write(template.render(path, append_base_template_values(template_values)))
 	
 	def post(self):
 		user = users.get_current_user()
 		if user:
-			# do stuff
-			pass
-	
+			recipe = Recipe()
+			recipe.name = self.request.get("name")
+			recipe.ingredients = self.request.get("ingredients")
+			recipe.method = self.request.get("method")
+			recipe.preparation_time = int(self.request.get("preparation_time"))
+			recipe.cooking_time = int(self.request.get("cooking_time"))
+			recipe.author = get_current_user()
+			recipe.put()
+			self.redirect("/")
+			
 def main():
 	application = webapp.WSGIApplication([
 		('/', MainHandler),
-		('/recipe', get_recipe),
+		('/recipe', recipe_detail),
 	], debug=True)
 	util.run_wsgi_app(application)
 
 
 if __name__ == '__main__':
 	main()
+
