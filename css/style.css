@@ -1,0 +1,132 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*------------------------------------*\
+	RESET
+\*------------------------------------*/
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td{
+	margin:0;
+	padding:0;
+}
+table{
+	border-collapse:collapse;
+	border-spacing:0;
+}
+fieldset,img{ 
+	border:0;
+}
+address,caption,cite,dfn,th,var{
+	font-style:normal;
+	font-weight:normal;
+}
+caption,th{
+	text-align:left;
+}
+h1,h2,h3,h4,h5,h6{
+	font-size:100%;
+	font-weight:normal;
+}
+q:before,q:after{
+	content:'';
+}
+abbr,acronym{
+	border:0;
+}
+
+/*------------------------------------*\
+	MAIN
+\*------------------------------------*/
+html{
+	font-family:Cambria, Georgia, "Times New Roman", Times, serif;
+	font-size:100%; /* 16px */
+	background:#fff;
+	color:#333;
+	height:101%;
+}
+body{
+	padding:10px 10px;
+}
+#header{
+	width:100%;
+	float:left;
+	padding:5px 0 5px 0;
+	border-bottom:1px solid #aaa;
+}
+#main{
+	width:900px;
+	margin:auto;
+}
+#content,
+#contentright{
+	margin:5px 0px 5px 0;
+	float:left;
+	display:inline;
+}
+#content{
+	width:700px;
+	padding-right: 5px;
+	word-wrap:break-word;
+}
+#contentright{
+	width:189px;
+	padding-left:5px;
+	border-left: 1px solid #aaa;
+	text-align:right;
+}
+#footer{
+	width:100%;
+	float:left;
+	clear:both;
+	padding:5px 0 5px 0;
+	border-top:1px solid #aaa;
+}
+.wrap {
+	position:relative;
+	margin:0 auto;
+	width:900px;
+}
+
+/*------------------------------------*\
+	HEADER
+\*------------------------------------*/
+#logo{
+	float:left;
+}
+div#nav{
+	float:right;
+}
+#header ul#menu {
+	margin:0;
+}
+#header ul#menu li{
+display:inline;
+}
+#header ul#menu li a{
+
+}
+#header ul#menu li a:hover{
+color:grey;
+}
+
+/*------------------------------------*\
+	IPHONE
+\*------------------------------------*/
+@media screen and (max-device-width: 480px){
+/*--- iPhone only CSS here ---*/
+
+body{
+	padding:0px;
+	width:auto;
+	-webkit-text-size-adjust:none;
+	font-family:Helvetica, Arial, Verdana, sans-serif;
+}
+div{
+	clear:both!important;
+	display:block!important;
+	width:100%!important;
+	float:none!important;
+	margin:0!important;
+	padding:0!important;
+}
+
+}

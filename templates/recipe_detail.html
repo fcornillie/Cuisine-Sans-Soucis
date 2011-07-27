@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-	<div id="recipe">
 	<h2>Recipe</h2>
 	{% if recipe %}
 	<h3>{{ recipe.name }}</h3>
@@ -23,6 +22,5 @@
 			<br/>Picture: <input type="file" name="pic" id="pic" accept="image/png, image/jpeg" />
 			<br/><input type="submit" />
 	{% endif %}
-	</div>
 	
 {% endblock %}

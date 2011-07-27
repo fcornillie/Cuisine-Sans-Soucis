@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
 
+{% block pagetitle %}
+	Recipes
+{% endblock %}
+
 {% block content %}
 	
-	<h2>Recipes</h2>
 	<a href="/recipe">Add</a> a recipe.
 	<ul>
 	{% for recipe in recipes %}
