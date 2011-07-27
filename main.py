@@ -27,12 +27,21 @@ from google.appengine.api import users
 from models import *
 from helpers import *
 
-class MainHandler(webapp.RequestHandler):
+class recipe_list(webapp.RequestHandler):
 	@login_required
 	def get(self):
 		
+		if self.request.get('foodtype'):
+			foodtype = FoodType.get(self.request.get('foodtype'))
+			recipes_query = Recipe.all().filter('foodtypes_list', foodtype).fetch(50)
+		else:
+			foodtype = None
+			recipes_query = Recipe.all().fetch(50)
+		
+		
 		template_values = {
-			'recipes':Recipe.all(),
+			'foodtype':foodtype,
+			'recipes':recipes_query,
 		}
 		
 		path = os.path.join(os.path.dirname(__file__), 'templates/recipe_list.html')
@@ -58,6 +67,7 @@ class recipe_detail(webapp.RequestHandler):
 		if user:
 			recipe = Recipe()
 			recipe.name = self.request.get("name")
+			recipe.teaser = self.request.get("teaser")
 			recipe.ingredients = self.request.get("ingredients")
 			recipe.method = self.request.get("method")
 			recipe.preparation_time = int(self.request.get("preparation_time"))
@@ -65,11 +75,28 @@ class recipe_detail(webapp.RequestHandler):
 			recipe.author = get_current_user()
 			recipe.put()
 			self.redirect("/")
+
+class get_image(webapp.RequestHandler):
+	""" Gets the image data for a certain object.
+	Requires:
+	+ object_key: the key of a certain object
+	+ image_property: the name of the Blob property.
+	"""
+
+	def get(self):
+		from google.appengine.ext import db
+		object = db.Model.get(self.request.get('object_key'))
+		# image_data = object._properties[self.request.get('image_property')]
+		image_data = object.image
+		self.response.headers['Content-Type'] = 'image/jpeg'
+		self.response.out.write(image_data)
 			
 def main():
 	application = webapp.WSGIApplication([
-		('/', MainHandler),
+		('/', recipe_list),
+		('/recipes', recipe_list),
 		('/recipe', recipe_detail),
+		('/get_image', get_image),
 	], debug=True)
 	util.run_wsgi_app(application)
 

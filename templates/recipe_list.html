@@ -6,11 +6,14 @@
 
 {% block content %}
 	
-	<a href="/recipe">Add</a> a recipe.
-	<ul>
+	<a href="/recipe">Add</a> a recipe.<br/>&nbsp;<br/>
+	{% if foodtype %}<br/>Listing only {{ foodtype.name }} food.<br/>{% endif %}
 	{% for recipe in recipes %}
-		<li><a href="/recipe?key={{ recipe.key }}">{{ recipe.name }}</a></li>
+		<a href="/recipe?key={{ recipe.key }}"><h2 class="inline">{{ recipe.name }}</h2></a>&nbsp;{{ recipe.rating }}<br/>
+		{% if recipe.image %}<a href="/recipe?key={{ recipe.key }}"><img class="recipe_list" src="/get_image?object_key={{ recipe.key }}" /></a>{% endif %}
+		{% if recipe.teaser %}<p>{{ recipe.teaser }}</p>{% endif %}
+		{% if recipe.foodtypes %}{% for ft in recipe.foodtypes %}<a href="/recipes?foodtype={{ ft.key }}">{{ ft.name }}</a>&nbsp;{% endfor %}|{% endif %} preparation: {{ recipe.preparation_time }} mins | cooking: {{ recipe.cooking_time }} mins
+		<!-- quickfix for inline header --><p>&nbsp;</p>
 	{% endfor %}
-	</ul>
 
 {% endblock %}

@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-	<h2>Recipe</h2>
 	{% if recipe %}
-	<h3>{{ recipe.name }}</h3>
-		{{ recipe.teaser }}
-		<br/>{{ recipe.preparation_time }} | {{ recipe.cooking_time }}
-		<br/>{{ recipe.ingredients }}
-		<br/>{{ recipe.method }}
-		<br/>{{ recipe.foodtypes }}
-		<br/>{{ recipe.author.nickname }}
-		<br/>{{ recipe.timestamp }}
+	{% if recipe.image %}<img class="recipe_detail" src="/get_image?object_key={{ recipe.key }}" />{% endif %}
+	<h2 class="inline">{{ recipe.name }}</h2>&nbsp;{{ recipe.rating }}
+	{% if recipe.teaser %}<br/>{{ recipe.teaser }}{% endif %}
+	<p>{% for ft in recipe.foodtypes %}<a href="/recipes?foodtype={{ ft.key }}">{{ ft.name }}</a>&nbsp;{% endfor %}</p>
+	<h3>Ingredients</h3>
+	<p>{{ recipe.ingredients }}</p>
+	<h3>Method</h3>
+	<p>preparation time: {{ recipe.preparation_time }} mins | cooking time: {{ recipe.cooking_time }} mins</p>
+	<p>{{ recipe.method }}</p>
+	<p>&nbsp;<br/>{{ recipe.author.nickname }} on {{ recipe.timestamp }}</p>
 	{% else %}
 		<form name="recipe" action="/recipe" method="post">
 			<input name="name" id="name" type="text" value="Recipe name here ..." />

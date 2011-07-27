@@ -109,6 +109,41 @@ color:grey;
 }
 
 /*------------------------------------*\
+	CONTENT
+\*------------------------------------*/
+h1{
+	font-size:32px;
+	font-weight:bold;
+}
+h2{
+	margin-top:10px;
+	font-size:24px;
+	font-weight:bold;
+}
+h3{
+	margin-top:20px;
+	font-size:16px;
+	text-transform:uppercase;
+}
+.inline{
+	display:inline;
+}
+p {
+	margin-top:5px;
+}
+img.recipe_list {
+	width: 120px;
+	float:left;
+	margin: 5px 10px 0 0;
+	border: 1px solid #aaa;
+}
+img.recipe_detail {
+	width: 280px;
+	float:right;
+	margin: 5px 0 20px 20px;
+	border: 1px solid #aaa;
+}
+/*------------------------------------*\
 	IPHONE
 \*------------------------------------*/
 @media screen and (max-device-width: 480px){
@@ -127,6 +162,12 @@ div{
 	float:none!important;
 	margin:0!important;
 	padding:0!important;
+}
+img{
+  max-width:100%;
+  height:auto;
+  margin:0;
+  float:none;
 }
 
 }

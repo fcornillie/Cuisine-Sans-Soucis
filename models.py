@@ -83,11 +83,23 @@ class Recipe(db.Model):
 	preparation_time = db.IntegerProperty()
 	cooking_time = db.IntegerProperty()
 	ingredients_list = db.ListProperty(db.Key)
-	foodtypes = db.ListProperty(db.Key)
+	foodtypes_list = db.ListProperty(db.Key)
 	author = db.ReferenceProperty(User, collection_name="recipes")
-	picture = db.BlobProperty()
+	image = db.BlobProperty()
 	season = db.StringProperty()
 	timestamp = db.DateTimeProperty(auto_now_add=True)
+	
+	@property
+	def foodtypes(self):
+		return FoodType.get(self.foodtypes_list)
+	
+	@property
+	def total_time(self):
+		return self.preparation_time + self.cooking_time
+	
+	@property
+	def rating(self):
+		return "***"
 
 class FoodType(db.Model):
 	name = db.CategoryProperty()
