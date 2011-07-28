@@ -166,6 +166,15 @@ div.img_recipe_detail{
 img.recipe_detail {
 	width:280px;
 	border:1px solid #aaa;
+	margin-top:10px;
+}
+span.recipe_name {
+	font-size:20px;
+	font-weight:bold;
+}
+span.recipe_name a {
+	color:black;
+	text-decoration:none;
 }
 /*------------------------------------*\
 	IPHONE
@@ -188,10 +197,13 @@ div{
 	padding:0!important;
 }
 img{
-  max-width:100%;
-  height:auto;
+	max-width:100%;
+	height:auto;
 }
 img.recipe_list{
+	width:100%!important;
+}
+img.recipe_detail{
 	width:100%!important;
 }
 div.recipe_list{
