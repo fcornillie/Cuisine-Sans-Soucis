@@ -87,8 +87,9 @@ class recipe_detail(webapp.RequestHandler):
 			recipe.preparation_time = int(self.request.get("preparation_time"))
 			recipe.cooking_time = int(self.request.get("cooking_time"))
 			recipe.author = get_current_user()
-			img_data = self.request.get("img")
-			recipe.image = db.Blob(img_data)
+			if self.request.get("img"):
+				img_data = self.request.get("img")
+				recipe.image = db.Blob(img_data)
 			recipe.put()
 			self.redirect("/")
 
