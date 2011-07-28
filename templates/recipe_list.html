@@ -7,13 +7,17 @@
 {% block content %}
 	
 	<a href="/recipe">Add</a> a recipe.<br/>&nbsp;<br/>
-	{% if foodtype %}<br/>Listing only {{ foodtype.name }} food.<br/>{% endif %}
+	<div id="recipe_query">Search: <input name="search"/> | {% if foodtypes %}Show only: {% for ft in foodtypes %}<a href="/recipes?foodtype={{ ft.key }}">{{ ft.name }}</a>&nbsp;{% endfor %}|&nbsp;{% endif %}<a href="/recipes?user={{ user.key }}">Show only my recipes</a>
+	</div>
+	{% if query %}<br/>Listing only{% if query.foodtype %} {{ query.foodtype.name }}{% endif %} food{% if query.user %} by {% ifequal query.user.key user.key %}you{% else %}{{ query.user.nickname }}{% endifequal %}{% endif %}.<br/>{% endif %}
+	<br/><div id="recipe_gallery">
 	{% for recipe in recipes %}
 		<div class="recipe_list">
-			<a href="/recipe?key={{ recipe.key }}">{% if recipe.image %}<img class="recipe_list" src="/get_image?object_key={{ recipe.key }}" />{% else %}<div style="width:220px;height:165px;border:1px solid #aaa;text-align:center;">no pic</div>{% endif %}</a>
+			<a href="/recipe?key={{ recipe.key }}">{% if recipe.image %}<div class="img_recipe_list"><img class="recipe_list" src="/get_image?object_key={{ recipe.key }}" /></div>{% else %}<div style="width:220px;height:165px;border:1px solid #aaa;text-align:center;">no pic</div>{% endif %}</a>
 			<p><a href="/recipe?key={{ recipe.key }}">{{ recipe.name }}</a>&nbsp;{{ recipe.rating }}</p>
 			<p style="font-size:12px;">{% if recipe.foodtypes %}{% for ft in recipe.foodtypes %}<a href="/recipes?foodtype={{ ft.key }}">{{ ft.name }}</a>&nbsp;{% endfor %}|{% endif %} {{ recipe.total_time }} mins</p>
 		</div>
 	{% endfor %}
+	</div>
 
 {% endblock %}

@@ -32,17 +32,29 @@ import logging
 class recipe_list(webapp.RequestHandler):
 	@login_required
 	def get(self):
+		query = {}
+		foodtype = None
+		user = None
 		
 		if self.request.get('foodtype'):
 			foodtype = FoodType.get(self.request.get('foodtype'))
-			recipes_query = Recipe.all().filter('foodtypes_list', foodtype).fetch(50)
-		else:
-			foodtype = None
-			recipes_query = Recipe.all().fetch(50)
+			query['foodtype'] = foodtype
+		if self.request.get('user'):
+			user = User.get(self.request.get('user'))
+			query['user'] = user
+			
+		recipes_query = Recipe.all()
 		
+		if foodtype:
+			recipes_query = recipes_query.filter('foodtypes_list', foodtype)
+		if user:
+			recipes_query = recipes_query.filter('author', user)
+		
+		recipes_query = recipes_query.fetch(50)
 		
 		template_values = {
-			'foodtype':foodtype,
+			'foodtypes':FoodType.all(),
+			'query':query,
 			'recipes':recipes_query,
 		}
 		

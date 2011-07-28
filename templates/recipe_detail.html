@@ -10,7 +10,7 @@
 	<h3>Method</h3>
 	<p>preparation time: {{ recipe.preparation_time }} mins | cooking time: {{ recipe.cooking_time }} mins</p>
 	<p>{{ recipe.method }}</p>
-	<div class="recipe_detail">{% if recipe.image %}<img class="recipe_detail" src="/get_image?object_key={{ recipe.key }}" />{% endif %}</div>
+	<div class="img_recipe_detail">{% if recipe.image %}<img class="recipe_detail" src="/get_image?object_key={{ recipe.key }}" />{% endif %}</div>
 	<p>&nbsp;<br/>{{ recipe.author.nickname }} on {{ recipe.timestamp }}</p>
 	{% else %}
 		<form name="recipe" action="/recipe" enctype="multipart/form-data" method="post">

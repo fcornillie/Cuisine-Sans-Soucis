@@ -146,15 +146,18 @@ p {
 div.recipe_list{
 	display:inline;
 	width:220px;
-	min-height:132px;
+	min-height:165px;
 	float:left;
 	margin:0 10px 10px 0;
+}
+div.img_recipe_list{
+	
 }
 img.recipe_list {
 	width:220px;
 	border:1px solid #aaa;
 }
-div.recipe_detail{
+div.img_recipe_detail{
 	/*margin:5px 10px 20px 20px;
 	position:absolute;
 	right:0px;
