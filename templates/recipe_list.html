@@ -9,7 +9,7 @@
 	<a href="/recipe">Add</a> a recipe.<br/>&nbsp;<br/>
 	<div id="recipe_query">Search: <input name="search"/> | {% ifnotequal foodtypes.count 0 %}Show only: {% for ft in foodtypes %}<a href="/recipes?foodtype={{ ft.key }}">{{ ft.name }}</a>&nbsp;{% endfor %}|&nbsp;{% endifnotequal %}<a href="/recipes?user={{ user.key }}">Show only my recipes</a>
 	</div>
-	{% if query %}<br/>Listing only{% if query.foodtype %} {{ query.foodtype.name }}{% endif %} food{% if query.user %} by {% ifequal query.user.key user.key %}you{% else %}{{ query.user.nickname }}{% endifequal %}{% endif %}.<br/>{% endif %}
+	{% if query %}<br/>Listing only{% if query.foodtype %} {{ query.foodtype.name }}{% endif %} food{% if query.user %} by {% ifequal query.user.key user.key %}you{% else %}{{ query.user.nickname }}{% endifequal %}{% endif %}. [<a href="/recipes">list all</a>]<br/>{% endif %}
 	<br/><div id="recipe_gallery">
 	{% for recipe in recipes %}
 		<div class="recipe_list">
