@@ -9,11 +9,11 @@
 	<a href="/recipe">Add</a> a recipe.<br/>&nbsp;<br/>
 	{% if foodtype %}<br/>Listing only {{ foodtype.name }} food.<br/>{% endif %}
 	{% for recipe in recipes %}
-		<a href="/recipe?key={{ recipe.key }}"><h2 class="inline">{{ recipe.name }}</h2></a>&nbsp;{{ recipe.rating }}<br/>
-		{% if recipe.image %}<a href="/recipe?key={{ recipe.key }}"><img class="recipe_list" src="/get_image?object_key={{ recipe.key }}" /></a>{% endif %}
-		{% if recipe.teaser %}<p>{{ recipe.teaser }}</p>{% endif %}
-		{% if recipe.foodtypes %}{% for ft in recipe.foodtypes %}<a href="/recipes?foodtype={{ ft.key }}">{{ ft.name }}</a>&nbsp;{% endfor %}|{% endif %} preparation: {{ recipe.preparation_time }} mins | cooking: {{ recipe.cooking_time }} mins
-		<!-- quickfix for inline header --><p>&nbsp;</p>
+		<div class="recipe_list">
+			<a href="/recipe?key={{ recipe.key }}">{% if recipe.image %}<img class="recipe_list" src="/get_image?object_key={{ recipe.key }}" />{% else %}<div style="width:220px;height:165px;border:1px solid #aaa;text-align:center;">no pic</div>{% endif %}</a>
+			<p><a href="/recipe?key={{ recipe.key }}">{{ recipe.name }}</a>&nbsp;{{ recipe.rating }}</p>
+			<p style="font-size:12px;">{% if recipe.foodtypes %}{% for ft in recipe.foodtypes %}<a href="/recipes?foodtype={{ ft.key }}">{{ ft.name }}</a>&nbsp;{% endfor %}|{% endif %} {{ recipe.total_time }} mins</p>
+		</div>
 	{% endfor %}
 
 {% endblock %}

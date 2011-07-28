@@ -2,7 +2,6 @@
 
 {% block content %}
 	{% if recipe %}
-	{% if recipe.image %}<img class="recipe_detail" src="/get_image?object_key={{ recipe.key }}" />{% endif %}
 	<h2 class="inline">{{ recipe.name }}</h2>&nbsp;{{ recipe.rating }}
 	{% if recipe.teaser %}<br/>{{ recipe.teaser }}{% endif %}
 	<p>{% for ft in recipe.foodtypes %}<a href="/recipes?foodtype={{ ft.key }}">{{ ft.name }}</a>&nbsp;{% endfor %}</p>
@@ -11,16 +10,17 @@
 	<h3>Method</h3>
 	<p>preparation time: {{ recipe.preparation_time }} mins | cooking time: {{ recipe.cooking_time }} mins</p>
 	<p>{{ recipe.method }}</p>
+	<div class="recipe_detail">{% if recipe.image %}<img class="recipe_detail" src="/get_image?object_key={{ recipe.key }}" />{% endif %}</div>
 	<p>&nbsp;<br/>{{ recipe.author.nickname }} on {{ recipe.timestamp }}</p>
 	{% else %}
-		<form name="recipe" action="/recipe" method="post">
+		<form name="recipe" action="/recipe" enctype="multipart/form-data" method="post">
 			<input name="name" id="name" type="text" value="Recipe name here ..." />
 			<br/><input name="teaser" id="teaser" type="text" value="Teaser here ..." />
 			<br/><select name="type" id="type"><option value="starter">starter</option><option value="main">main course</option><option value="dessert">dessert</option></select>
 			<br/><input name="preparation_time" id="preparation_time" type="text" value="Preparation time" /> | <input name="cooking_time" id="cooking_time" type="text" value="Cooking time" />
 			<br/><textarea name="ingredients" id="ingredients" rows="10" cols="80">Ingredients here ...</textarea>
 			<br/><textarea name="method" id="method" type="text" rows="15" cols="80">Method here ...</textarea>
-			<br/>Picture: <input type="file" name="pic" id="pic" accept="image/png, image/jpeg" />
+			<br/>Picture: <input type="file" name="img" id="img" accept="image/png, image/jpeg" />
 			<br/><input type="submit" />
 	{% endif %}
 	

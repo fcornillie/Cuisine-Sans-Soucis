@@ -34,7 +34,7 @@ abbr,acronym{
 }
 
 /*------------------------------------*\
-	MAIN
+	MAIN BLOCKS
 \*------------------------------------*/
 html{
 	font-family:Cambria, Georgia, "Times New Roman", Times, serif;
@@ -66,6 +66,7 @@ body{
 	width:700px;
 	padding-right: 5px;
 	word-wrap:break-word;
+	position:relative;
 }
 #contentright{
 	width:189px;
@@ -80,10 +81,21 @@ body{
 	padding:5px 0 5px 0;
 	border-top:1px solid #aaa;
 }
+
+/*------------------------------------*\
+	GENERAL
+\*------------------------------------*/
+
 .wrap {
 	position:relative;
 	margin:0 auto;
 	width:900px;
+}
+.clearfloat {
+clear:both;
+line-height:0px;
+font-size:1px;
+height:0;
 }
 
 /*------------------------------------*\
@@ -131,17 +143,26 @@ h3{
 p {
 	margin-top:5px;
 }
-img.recipe_list {
-	width: 120px;
+div.recipe_list{
+	display:inline;
+	width:220px;
+	min-height:132px;
 	float:left;
-	margin: 5px 10px 0 0;
-	border: 1px solid #aaa;
+	margin:0 10px 10px 0;
+}
+img.recipe_list {
+	width:220px;
+	border:1px solid #aaa;
+}
+div.recipe_detail{
+	/*margin:5px 10px 20px 20px;
+	position:absolute;
+	right:0px;
+	top:0px;*/
 }
 img.recipe_detail {
-	width: 280px;
-	float:right;
-	margin: 5px 0 20px 20px;
-	border: 1px solid #aaa;
+	width:280px;
+	border:1px solid #aaa;
 }
 /*------------------------------------*\
 	IPHONE
@@ -166,8 +187,12 @@ div{
 img{
   max-width:100%;
   height:auto;
-  margin:0;
-  float:none;
+}
+img.recipe_list{
+	width:100%!important;
+}
+div.recipe_list{
+	text-align:center!important;
 }
 
 }
