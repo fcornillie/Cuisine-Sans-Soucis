@@ -95,19 +95,30 @@ class recipe_detail(webapp.RequestHandler):
 
 class schedule(webapp.RequestHandler):
 	def get(self):
-		from datetime import datetime
-
+		import datetime
+		
 		if self.request.get("user"):
 			user = User.get(self.request.get("user"))
 		else:
 			user = get_current_user()
 		
-		schedule = Meal.all().filter('user', user).filter('timestamp >=', datetime.date(datetime.now())).order('timestamp')
-		future = None
+		meals = Meal.all().filter('user', user).filter('timestamp >=', datetime.date.today()).order('timestamp')
 		
+		schedule = []
+		if self.request.get('future_days'):
+			future_days = self.request.get('future_days')
+		else:
+			from settings import DEFAULT_FUTURE_DAYS
+			future_days = DEFAULT_FUTURE_DAYS		
+		for i in range(0, future_days):
+			date = {
+				'date':datetime.date.today()+datetime.timedelta(i),
+				'meals':Meal.gql("WHERE user = :1 AND timestamp = :2", get_current_user(), datetime.date.today()+datetime.timedelta(i)),
+			}
+			schedule.append(date)
+
 		template_values = {
 			'schedule':schedule,
-			'future':future,
 		}
 		
 		path = os.path.join(os.path.dirname(__file__), 'templates/schedule.html')

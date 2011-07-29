@@ -176,6 +176,10 @@ span.recipe_name a {
 	color:black;
 	text-decoration:none;
 }
+ul.schedule {
+	list-style-type:none;
+}
+
 /*------------------------------------*\
 	IPHONE
 \*------------------------------------*/
