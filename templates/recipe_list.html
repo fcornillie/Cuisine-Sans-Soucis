@@ -14,7 +14,7 @@
 	{% for recipe in recipes %}
 		<div class="recipe_list">
 			<a href="/recipe?key={{ recipe.key }}">{% if recipe.image %}<div class="img_recipe_list"><img class="recipe_list" src="/get_image?object_key={{ recipe.key }}" /></div>{% else %}<div style="width:220px;height:165px;border:1px solid #aaa;text-align:center;">no pic</div>{% endif %}</a>
-			<p><span class="recipe_name"><a href="/recipe?key={{ recipe.key }}">{{ recipe.name }}</a></span>&nbsp;{{ recipe.rating }}</p>
+			<p><span class="recipe_name"><a href="/recipe?key={{ recipe.key }}">{{ recipe.name|capfirst }}</a></span>&nbsp;{{ recipe.rating }}</p>
 			<p style="font-size:12px;">{% if recipe.foodtypes %}{% for ft in recipe.foodtypes %}<a href="/recipes?foodtype={{ ft.key }}">{{ ft.name }}</a>&nbsp;{% endfor %}|{% endif %} {{ recipe.total_time }} mins</p>
 		</div>
 	{% endfor %}

@@ -127,6 +127,31 @@ class get_image(webapp.RequestHandler):
 		image_data = object.image
 		self.response.headers['Content-Type'] = 'image/jpeg'
 		self.response.out.write(image_data)
+
+class import_content(webapp.RequestHandler):
+	def get(self):
+		from content import *
+		for r in recipes:
+			recipe = Recipe(author=get_current_user())
+			recipe.name = r['name']
+			recipe.teaser = r['teaser']
+			recipe.type = r['type']
+			recipe.preparation_time = r['preparation_time']
+			recipe.cooking_time = r['cooking_time']
+			from google.appengine.api import urlfetch
+			recipe.image = db.Blob(urlfetch.Fetch(r['image']).content)
+			recipe.publish = r['publish']
+			recipe.ingredients = r['ingredients']
+			recipe.method = r['method']
+			for f in r['foodtypes']:
+				if FoodType.all().filter('name', f).count() == 1:
+					ft = FoodType.all().filter('name', f)[0]
+				else:
+					ft = FoodType(name=f)
+					ft.put()
+				recipe.foodtypes_list.append(ft.key())
+			recipe.put()
+		self.response.out.write("OK")
 			
 def main():
 	application = webapp.WSGIApplication([
@@ -135,6 +160,7 @@ def main():
 		('/recipe', recipe_detail),
 		('/calendar', schedule),
 		('/get_image', get_image),
+		('/import_content', import_content),
 	], debug=True)
 	util.run_wsgi_app(application)
 
