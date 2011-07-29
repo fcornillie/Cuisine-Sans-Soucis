@@ -93,6 +93,26 @@ class recipe_detail(webapp.RequestHandler):
 			recipe.put()
 			self.redirect("/")
 
+class schedule(webapp.RequestHandler):
+	def get(self):
+		from datetime import datetime
+
+		if self.request.get("user"):
+			user = User.get(self.request.get("user"))
+		else:
+			user = get_current_user()
+		
+		schedule = Meal.all().filter('user', user).filter('timestamp >=', datetime.date(datetime.now())).order('timestamp')
+		future = None
+		
+		template_values = {
+			'schedule':schedule,
+			'future':future,
+		}
+		
+		path = os.path.join(os.path.dirname(__file__), 'templates/schedule.html')
+		self.response.out.write(template.render(path, append_base_template_values(template_values)))
+
 class get_image(webapp.RequestHandler):
 	""" Gets the image data for a certain object.
 	Requires:
@@ -113,6 +133,7 @@ def main():
 		('/', recipe_list),
 		('/recipes', recipe_list),
 		('/recipe', recipe_detail),
+		('/calendar', schedule),
 		('/get_image', get_image),
 	], debug=True)
 	util.run_wsgi_app(application)

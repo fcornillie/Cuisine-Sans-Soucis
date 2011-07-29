@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	
+	{% ifnotequal schedule.count 0 %}
+		<ul>
+		{% for day in schedule %}
+			<li><h2>{{ day.timestamp|date:"l" }}</h2><a href="/recipe?key={{ recipe.key }}">{{ day.recipe.name }}</a></li>
+		{% endfor %}
+		</ul>
+	{% else %}
+		no schedule defined yet
+	{% endifnotequal %}
+
+{% endblock %}
