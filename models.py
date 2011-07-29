@@ -87,6 +87,7 @@ class Recipe(db.Model):
 	author = db.ReferenceProperty(User, collection_name="recipes")
 	image = db.BlobProperty()
 	season = db.StringProperty()
+	publish = db.StringProperty(choices=set(["no", "friends", "public"]))
 	timestamp = db.DateTimeProperty(auto_now_add=True)
 	
 	@property
