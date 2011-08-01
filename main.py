@@ -93,6 +93,21 @@ class recipe_detail(webapp.RequestHandler):
 			recipe.put()
 			self.redirect("/")
 
+class recipe_edit(webapp.RequestHandler):
+	def post(self):
+		user = users.get_current_user()
+		if user:
+			recipe = Recipe.get(self.request.get("key"))
+			property = self.request.get("id")
+			newvalue = self.request.get("value")
+			from google.appengine.ext.db import IntegerProperty
+			if isinstance(recipe.fields()[property], IntegerProperty):
+				recipe.__setattr__(property, int(newvalue))
+			else:
+				recipe.__setattr__(property, unicode(newvalue))
+			recipe.put()
+			self.response.out.write(newvalue)
+
 class schedule(webapp.RequestHandler):
 	def get(self):
 		import datetime
@@ -141,7 +156,7 @@ class get_image(webapp.RequestHandler):
 
 class import_content(webapp.RequestHandler):
 	def get(self):
-		from content import *
+		from content import recipes
 		for r in recipes:
 			recipe = Recipe(author=get_current_user())
 			recipe.name = r['name']
@@ -169,6 +184,7 @@ def main():
 		('/', recipe_list),
 		('/recipes', recipe_list),
 		('/recipe', recipe_detail),
+		('/recipe_edit', recipe_edit),
 		('/calendar', schedule),
 		('/get_image', get_image),
 		('/import_content', import_content),
