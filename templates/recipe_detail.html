@@ -16,12 +16,12 @@
 	{% ifequal recipe.author.key user.key %}
 	<script type="text/javascript">
 	$(document).ready(function() {
-		$('.edit').editable('/recipe_edit', {
+		$('.edit').editable('/recipe/edit', {
 			submitdata : {key: "{{recipe.key}}"},
 			indicator : 'Saving...',
 			tooltip   : 'Click to edit...',
 		});
-		$('.edit_area').editable('/recipe_edit', { 
+		$('.edit_area').editable('/recipe/edit', { 
 			submitdata : {key: "{{recipe.key}}"},
 			type      : 'textarea',
 			cancel    : 'Cancel',

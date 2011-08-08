@@ -24,6 +24,7 @@ from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp import util
 from google.appengine.ext.webapp.util import login_required
 from google.appengine.api import users
+from django.utils import simplejson as json
 from models import *
 from helpers import *
 
@@ -107,6 +108,17 @@ class recipe_edit(webapp.RequestHandler):
 				recipe.__setattr__(property, unicode(newvalue))
 			recipe.put()
 			self.response.out.write(newvalue)
+			
+class recipe_jsonquery(webapp.RequestHandler):
+	def post(self):
+		user = users.get_current_user()
+		if user:
+			recipes = []
+			for r in Recipe.all():
+				if self.request.get("query") in r.name:
+					recipes.append({'key':str(r.key()), 'name':r.name})
+			result = {'recipes':recipes}
+			self.response.out.write(json.dumps(result))
 
 class schedule(webapp.RequestHandler):
 	def get(self):
@@ -184,7 +196,8 @@ def main():
 		('/', schedule),
 		('/recipes', recipe_list),
 		('/recipe', recipe_detail),
-		('/recipe_edit', recipe_edit),
+		('/recipe/edit', recipe_edit),
+		('/recipe/jsonquery', recipe_jsonquery),
 		('/calendar', schedule),
 		('/get_image', get_image),
 		('/import_content', import_content),

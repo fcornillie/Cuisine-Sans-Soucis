@@ -4,12 +4,54 @@
 
 <ul class="schedule">
 	{% for day in schedule %}
-		<li><h2>{{ day.date|naturalday:"l" }}</h2>
-		{% for meal in day.meals %}
-			<a href="/recipe?key={{ meal.recipe.key }}">{{ meal.recipe.name }}</a>
-		{% endfor %}
+		<li>
+			<div class="date">{{ day.date|naturalday:"l" }}</div>
+			<div class="meal">
+			<input class="quickadd" id='quickadd{{ day.date|date:"U" }}' type="text" value="quickadd ..." />
+			<div class="query_result"></div>
+			{% for meal in day.meals %}
+				<a href="/recipe?key={{ meal.recipe.key }}">{{ meal.recipe.name }}</a>
+			{% endfor %}
+			</div>
+			<div class="clearfloat"></div>
 		</li>
 	{% endfor %}
 </ul>
+
+<div id="debug" style="color:red;">debug</div>
+<script type="text/javascript">
+$("input.quickadd").focus(function() {
+	if ($(this).val()=="quickadd ...") { $(this).val(""); }
+});
+$("input.quickadd").focusout(function() {
+	if ($(this).val()=="") { $(this).val("quickadd ..."); }
+});
+$("input.quickadd").keyup(function() {
+	var input = $(this);
+	if(input.val().length > 1) {
+		$.ajax({
+			type: "POST", 
+			url: "/recipe/jsonquery", 
+			data: "query=" + input.val(),
+			success: function( response ) {
+				var results_html = "";
+				json_response = eval('(' + response + ')');
+				if (json_response.recipes.length > 0) {
+					results_html += "<ul>";
+					$.each(json_response.recipes, function(index, recipe) {
+						results_html += "<li>" + recipe.name + "</li>"
+					});
+					results_html += "</ul>";
+				} else {
+					results_html += "no matching recipes found";
+				}
+				input.parent().children("div.query_result").html(results_html);
+			}
+		});
+	} else {
+		input.parent().children("div.query_result").html("");
+	}
+});
+</script>
 
 {% endblock %}

@@ -179,6 +179,14 @@ span.recipe_name a {
 ul.schedule {
 	list-style-type:none;
 }
+ul.schedule div.date {
+	float:left;
+	width:100px;
+	color:grey;
+}
+ul.schedule div.meal {
+	float:left;
+}
 
 /*------------------------------------*\
 	IPHONE
