@@ -181,7 +181,7 @@ class import_content(webapp.RequestHandler):
 			
 def main():
 	application = webapp.WSGIApplication([
-		('/', recipe_list),
+		('/', schedule),
 		('/recipes', recipe_list),
 		('/recipe', recipe_detail),
 		('/recipe_edit', recipe_edit),
@@ -189,6 +189,8 @@ def main():
 		('/get_image', get_image),
 		('/import_content', import_content),
 	], debug=True)
+	from google.appengine.ext.webapp import template
+	template.register_template_library('django.contrib.humanize.templatetags.humanize')
 	util.run_wsgi_app(application)
 
 

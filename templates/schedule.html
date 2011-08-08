@@ -4,7 +4,7 @@
 
 <ul class="schedule">
 	{% for day in schedule %}
-		<li><h2>{{ day.date|date:"l" }}</h2>
+		<li><h2>{{ day.date|naturalday:"l" }}</h2>
 		{% for meal in day.meals %}
 			<a href="/recipe?key={{ meal.recipe.key }}">{{ meal.recipe.name }}</a>
 		{% endfor %}
