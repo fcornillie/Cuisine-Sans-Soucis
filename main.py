@@ -121,6 +121,7 @@ class recipe_jsonquery(webapp.RequestHandler):
 			self.response.out.write(json.dumps(result))
 
 class schedule(webapp.RequestHandler):
+	@login_required
 	def get(self):
 		import datetime
 		
@@ -158,6 +159,7 @@ class get_image(webapp.RequestHandler):
 	+ image_property: the name of the Blob property.
 	"""
 
+	@login_required
 	def get(self):
 		from google.appengine.ext import db
 		object = db.Model.get(self.request.get('object_key'))
@@ -167,6 +169,7 @@ class get_image(webapp.RequestHandler):
 		self.response.out.write(image_data)
 
 class import_content(webapp.RequestHandler):
+	@login_required
 	def get(self):
 		from content import recipes
 		for r in recipes:
