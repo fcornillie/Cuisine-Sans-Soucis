@@ -115,7 +115,7 @@ class recipe_jsonquery(webapp.RequestHandler):
 		if user:
 			recipes = []
 			for r in Recipe.all():
-				if self.request.get("query") in r.name:
+				if self.request.get("query").lower() in r.name.lower():
 					recipes.append({'key':str(r.key()), 'name':r.name})
 			result = {'recipes':recipes}
 			self.response.out.write(json.dumps(result))
