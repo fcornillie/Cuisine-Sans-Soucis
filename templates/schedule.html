@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<ul class="schedule">
+<ul id="schedule">
 	{% for day in schedule %}
 		<li class="date" key='{{ day.date|date:"Y_n_j" }}'>
 			<div class="date">{{ day.date|naturalday:"l" }}</div>
@@ -12,7 +12,7 @@
 						<li key="{{ meal.recipe.key }}"><a href="/recipe?key={{ meal.recipe.key }}">{{ meal.recipe.name }}</a> [<a onclick='modifySchedule($(this), 2)'>remove</a>]</li>
 					{% endfor %}
 				</ul>
-				<input class="quickadd" id='quickadd{{ day.date|date:"U" }}' type="text" value="quickadd ..." />
+				<input class="quickadd" type="text" value="quickadd ..." />
 				<div class="loading">loading ...</div>
 				<ul class="query_result"></ul>
 			</div>
@@ -24,10 +24,12 @@
 <div id="debug" style="color:red;">debug</div>
 <script type="text/javascript">
 $("input.quickadd").focus(function() {
-	if ($(this).val()=="quickadd ...") { $(this).val(""); }
+	$("#schedule input.quickadd").val("quickadd ...");
+	$("#schedule ul.query_result").html("")
+	$(this).val("");
 });
 $("input.quickadd").focusout(function() {
-	if ($(this).val()=="") { $(this).val("quickadd ..."); }
+	$(this).val("quickadd ...");
 });
 $("input.quickadd").keyup(function() {
 	var input = $(this);
@@ -69,10 +71,13 @@ function modifySchedule(button, action) {
 			json_response = eval('(' + response + ')');
 			if (json_response.result=="ADD_OK") {
 				date_li.children("div.meal ul.recipes").append("<li key=" + json_response.recipe.key + "><a href='/recipe?key=" + json_response.recipe.key + "'>" + json_response.recipe.name + "</a> [<a onclick='modifySchedule($(this), 2)'>remove</a>]</li>");
+				date_li.children("div.meal input.quickadd").val("quickadd ...")
+				date_li.children("div.meal ul.query_result").html("")
 			}
 			if (json_response.result=="REMOVE_OK") {
-				$("ul.recipes li[key='" + recipe +"']").remove();
+				date_li.children("div.meal ul.recipes li[key='" + recipe +"']").remove();
 			}
+			date_li.children("div.meal input.quickadd").focus();
 		}
 	});
 }

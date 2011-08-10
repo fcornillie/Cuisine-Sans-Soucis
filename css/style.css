@@ -176,15 +176,15 @@ span.recipe_name a {
 	color:black;
 	text-decoration:none;
 }
-ul.schedule {
+ul#schedule {
 	list-style-type:none;
 }
-ul.schedule div.date {
+ul#schedule div.date {
 	float:left;
 	width:100px;
 	color:grey;
 }
-ul.schedule div.meal {
+ul#schedule div.meal {
 	float:left;
 }
 .loading {
