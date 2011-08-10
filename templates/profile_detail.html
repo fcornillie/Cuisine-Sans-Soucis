@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block profile_status %}active{% endblock %}
+
+{% block content %}
+{{ user.nickname }}
+
+<br/>&nbsp;<br/>Full user profile here: likes/dislikes, favourite recipes, tracking & logging details (number of recipes cooked, contributed, etc.), friends, etc etc.
+
+{% endblock %}

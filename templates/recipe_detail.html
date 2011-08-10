@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% block recipes_status %}active{% endblock %}
+
 {% block content %}
 	{% if recipe %}
 	<h2 id="name" class="inline edit">{{ recipe.name|capfirst }}</h2>&nbsp;{{ recipe.rating }}

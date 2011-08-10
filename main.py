@@ -197,6 +197,22 @@ class schedule_modify(webapp.RequestHandler):
 			
 			self.response.out.write(json.dumps(result))
 
+class profile_detail(webapp.RequestHandler):
+	@login_required
+	def get(self):
+		
+		if self.request.get("user"):
+			user = User.get(self.request.get("user"))
+		else:
+			user = helpers.get_current_user()
+			
+		template_values = {
+			'user':user,
+		}
+		
+		path = os.path.join(os.path.dirname(__file__), 'templates/profile_detail.html')
+		self.response.out.write(template.render(path, helpers.append_base_template_values(template_values)))
+	
 class get_image(webapp.RequestHandler):
 	""" Gets the image data for a certain object.
 	Requires:
@@ -247,6 +263,7 @@ def main():
 		('/recipe/jsonquery', recipe_jsonquery),
 		('/schedule', schedule),
 		('/schedule/modify', schedule_modify),
+		('/profile', profile_detail),
 		('/get_image', get_image),
 		('/import_content', import_content),
 	], debug=True)

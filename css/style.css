@@ -119,6 +119,13 @@ div#nav{
 #header ul#menu li a:hover{
 	color:grey;
 }
+#header ul#menu img {
+	padding-bottom: 5px;
+	margin-left: 8px;
+}
+#header ul#menu img.active {
+	border-bottom:2px solid #666;
+}
 
 /*------------------------------------*\
 	CONTENT
