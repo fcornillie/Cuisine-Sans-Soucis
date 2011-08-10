@@ -111,7 +111,7 @@ class Ingredient(db.Model):
 class Meal(db.Model):
 	""" A Meal represents one instance where a User prepares and devours a Meal. """
 	
-	timestamp = db.DateTimeProperty(auto_now_add=True)
+	date = db.DateTimeProperty()
 	recipe = db.ReferenceProperty(Recipe)
 	user = db.ReferenceProperty(User)
 	rating = db.RatingProperty()

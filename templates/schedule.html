@@ -4,14 +4,17 @@
 
 <ul class="schedule">
 	{% for day in schedule %}
-		<li>
+		<li class="date" key='{{ day.date|date:"Y_n_j" }}'>
 			<div class="date">{{ day.date|naturalday:"l" }}</div>
 			<div class="meal">
-			<input class="quickadd" id='quickadd{{ day.date|date:"U" }}' type="text" value="quickadd ..." />
-			<div class="query_result"></div>
-			{% for meal in day.meals %}
-				<a href="/recipe?key={{ meal.recipe.key }}">{{ meal.recipe.name }}</a>
-			{% endfor %}
+				<ul class="recipes">
+					{% for meal in day.meals %}
+						<li key="{{ meal.recipe.key }}"><a href="/recipe?key={{ meal.recipe.key }}">{{ meal.recipe.name }}</a> [<a onclick='modifySchedule($(this), 2)'>remove</a>]</li>
+					{% endfor %}
+				</ul>
+				<input class="quickadd" id='quickadd{{ day.date|date:"U" }}' type="text" value="quickadd ..." />
+				<div class="loading">loading ...</div>
+				<ul class="query_result"></ul>
 			</div>
 			<div class="clearfloat"></div>
 		</li>
@@ -29,6 +32,8 @@ $("input.quickadd").focusout(function() {
 $("input.quickadd").keyup(function() {
 	var input = $(this);
 	if(input.val().length > 1) {
+		input.parent().children("ul.query_result").html("");
+		input.parent().children("div.loading").show();
 		$.ajax({
 			type: "POST", 
 			url: "/recipe/jsonquery", 
@@ -37,21 +42,40 @@ $("input.quickadd").keyup(function() {
 				var results_html = "";
 				json_response = eval('(' + response + ')');
 				if (json_response.recipes.length > 0) {
-					results_html += "<ul>";
 					$.each(json_response.recipes, function(index, recipe) {
-						results_html += "<li>" + recipe.name + "</li>"
+						results_html += "<li key='" + recipe.key + "'><a onclick='modifySchedule($(this), 1)'>" + recipe.name + "</a></li>"
 					});
-					results_html += "</ul>";
 				} else {
 					results_html += "no matching recipes found";
 				}
-				input.parent().children("div.query_result").html(results_html);
+				input.parent().children("div.loading").hide();
+				input.parent().children("ul.query_result").html(results_html);
 			}
 		});
 	} else {
-		input.parent().children("div.query_result").html("");
+		input.parent().children("div.loading").hide();
+		input.parent().children("ul.query_result").html("");
 	}
 });
+function modifySchedule(button, action) {
+	var date_li = button.parentsUntil("li.date").parent();
+	var recipe = button.parent().attr("key");
+	var date = date_li.attr("key");
+	$.ajax({
+		type: "POST", 
+		url: "/schedule/modify", 
+		data: "recipe=" + recipe + "&date=" + date + "&action=" + action,
+		success: function( response ) {
+			json_response = eval('(' + response + ')');
+			if (json_response.result=="ADD_OK") {
+				date_li.children("div.meal ul.recipes").append("<li key=" + json_response.recipe.key + "><a href='/recipe?key=" + json_response.recipe.key + "'>" + json_response.recipe.name + "</a> [<a onclick='modifySchedule($(this), 2)'>remove</a>]</li>");
+			}
+			if (json_response.result=="REMOVE_OK") {
+				$("ul.recipes li[key='" + recipe +"']").remove();
+			}
+		}
+	});
+}
 </script>
 
 {% endblock %}

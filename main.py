@@ -26,7 +26,7 @@ from google.appengine.ext.webapp.util import login_required
 from google.appengine.api import users
 from django.utils import simplejson as json
 from models import *
-from helpers import *
+import helpers
 
 import logging
 
@@ -60,7 +60,7 @@ class recipe_list(webapp.RequestHandler):
 		}
 		
 		path = os.path.join(os.path.dirname(__file__), 'templates/recipe_list.html')
-		self.response.out.write(template.render(path, append_base_template_values(template_values)))
+		self.response.out.write(template.render(path, helpers.append_base_template_values(template_values)))
 
 class recipe_detail(webapp.RequestHandler):
 	@login_required
@@ -75,7 +75,7 @@ class recipe_detail(webapp.RequestHandler):
 		}
 		
 		path = os.path.join(os.path.dirname(__file__), 'templates/recipe_detail.html')
-		self.response.out.write(template.render(path, append_base_template_values(template_values)))
+		self.response.out.write(template.render(path, helpers.append_base_template_values(template_values)))
 	
 	def post(self):
 		user = users.get_current_user()
@@ -87,7 +87,7 @@ class recipe_detail(webapp.RequestHandler):
 			recipe.method = self.request.get("method")
 			recipe.preparation_time = int(self.request.get("preparation_time"))
 			recipe.cooking_time = int(self.request.get("cooking_time"))
-			recipe.author = get_current_user()
+			recipe.author = helpers.get_current_user()
 			if self.request.get("img"):
 				img_data = self.request.get("img")
 				recipe.image = db.Blob(img_data)
@@ -128,9 +128,9 @@ class schedule(webapp.RequestHandler):
 		if self.request.get("user"):
 			user = User.get(self.request.get("user"))
 		else:
-			user = get_current_user()
+			user = helpers.get_current_user()
 		
-		meals = Meal.all().filter('user', user).filter('timestamp >=', datetime.date.today()).order('timestamp')
+		meals = Meal.all().filter('user', user).filter('date >=', datetime.date.today()).order('date')
 		
 		schedule = []
 		if self.request.get('future_days'):
@@ -141,7 +141,7 @@ class schedule(webapp.RequestHandler):
 		for i in range(0, future_days):
 			date = {
 				'date':datetime.date.today()+datetime.timedelta(i),
-				'meals':Meal.gql("WHERE user = :1 AND timestamp = :2", get_current_user(), datetime.date.today()+datetime.timedelta(i)),
+				'meals':Meal.gql("WHERE user = :1 AND date = :2", helpers.get_current_user(), datetime.date.today()+datetime.timedelta(i)),
 			}
 			schedule.append(date)
 
@@ -150,7 +150,52 @@ class schedule(webapp.RequestHandler):
 		}
 		
 		path = os.path.join(os.path.dirname(__file__), 'templates/schedule.html')
-		self.response.out.write(template.render(path, append_base_template_values(template_values)))
+		self.response.out.write(template.render(path, helpers.append_base_template_values(template_values)))
+
+class schedule_modify(webapp.RequestHandler):
+	def post(self):
+		user = users.get_current_user()
+		if user:
+			import datetime
+			dateparts = [int(i) for i in self.request.get("date").split("_")]
+			date = datetime.datetime(dateparts[0], dateparts[1], dateparts[2])
+			recipe = Recipe.get(self.request.get("recipe"))
+			action = int(self.request.get("action"))
+			
+			# first check whether recipe is already scheduled for that day
+			meal_query = Meal.gql("WHERE user = :1 AND date = :2 AND recipe = :3", helpers.get_current_user(), date, recipe)
+			
+			# adding a recipe
+			if action==1:
+				if meal_query.count() > 0:
+					result = {'result':'ADD_ERROR'}
+				else:
+					# add new meal
+					meal = Meal(date=date, recipe=recipe, user=helpers.get_current_user())
+					meal.put()
+					result = {
+						'result':'ADD_OK',
+						'recipe':{
+							'key':str(recipe.key()),
+							'name':recipe.name,
+						}
+					}
+			# removing a recipe
+			elif action==2:
+				if meal_query.count() == 0:
+					result = {'result':'REMOVE_ERROR'}
+				else:
+					meal = meal_query[0]
+					meal.delete()
+					result = {
+						'result':'REMOVE_OK',
+						'recipe':{
+							'key':str(recipe.key()),
+							'name':recipe.name,
+						}
+					}
+			
+			self.response.out.write(json.dumps(result))
 
 class get_image(webapp.RequestHandler):
 	""" Gets the image data for a certain object.
@@ -163,7 +208,6 @@ class get_image(webapp.RequestHandler):
 	def get(self):
 		from google.appengine.ext import db
 		object = db.Model.get(self.request.get('object_key'))
-		# image_data = object._properties[self.request.get('image_property')]
 		image_data = object.image
 		self.response.headers['Content-Type'] = 'image/jpeg'
 		self.response.out.write(image_data)
@@ -173,7 +217,7 @@ class import_content(webapp.RequestHandler):
 	def get(self):
 		from content import recipes
 		for r in recipes:
-			recipe = Recipe(author=get_current_user())
+			recipe = Recipe(author=helpers.get_current_user())
 			recipe.name = r['name']
 			recipe.teaser = r['teaser']
 			recipe.type = r['type']
@@ -201,7 +245,8 @@ def main():
 		('/recipe', recipe_detail),
 		('/recipe/edit', recipe_edit),
 		('/recipe/jsonquery', recipe_jsonquery),
-		('/calendar', schedule),
+		('/schedule', schedule),
+		('/schedule/modify', schedule_modify),
 		('/get_image', get_image),
 		('/import_content', import_content),
 	], debug=True)

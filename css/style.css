@@ -111,13 +111,13 @@ div#nav{
 	margin:0;
 }
 #header ul#menu li{
-display:inline;
+	display:inline;
 }
 #header ul#menu li a{
 
 }
 #header ul#menu li a:hover{
-color:grey;
+	color:grey;
 }
 
 /*------------------------------------*\
@@ -186,6 +186,27 @@ ul.schedule div.date {
 }
 ul.schedule div.meal {
 	float:left;
+}
+.loading {
+	display:none;
+}
+input.quickadd {
+	width:200px;
+}
+ul.recipes {
+	list-style-type:none;
+}
+ul.query_result {
+	list-style-type:none;
+}
+ul.query_result li{
+	width:200px;
+	background-color:#ccc;
+	border:1px solid #666;
+}
+ul.query_result li a:hover{
+	text-decoration:underline;
+	cursor:pointer;
 }
 
 /*------------------------------------*\
