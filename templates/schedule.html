@@ -44,7 +44,7 @@ function onKeyUp(input, event) {
 function queryRecipes(input) {
 	if(input.val().length > 1) {
 		input.parent().children("ul.query_result").html("");
-		input.parent().append(loader_html);
+		if (input.parent().children("div.loading").length==0) { input.parent().append(loader_html) };
 		$.ajax({
 			type: "POST", 
 			url: "/recipe/jsonquery", 
@@ -89,14 +89,14 @@ function modifySchedule(origin, action) {
 			if (json_response.result=="ADD_OK") {
 				var recipe_html = "<li key='" + json_response.recipe.key + "'><a href='/recipe?key=" + json_response.recipe.key + "'>" + json_response.recipe.name + "</a> [<a onclick='modifySchedule($(this), 2)'>remove</a>]</li>";
 				origin.blur();
-				date_li.children("div.meal ul.recipes").append(recipe_html);
-				date_li.children("div.meal input.quickadd").val("quickadd ...")
-				date_li.children("div.meal ul.query_result").html("")
+				date_li.find("input.quickadd").val("quickadd ...")
+				date_li.find("ul.query_result").html("")
+				date_li.find("ul.recipes").append(recipe_html);
 			}
 			if (json_response.result=="REMOVE_OK") {
-				date_li.children("div.meal ul.recipes li[key='" + recipe +"']").remove();
+				date_li.find("li[key='" + recipe +"']").remove();
 			}
-			date_li.children("div.meal input.quickadd").focus();
+			date_li.find("input.quickadd").focus();
 		}
 	});
 }
