@@ -44,7 +44,8 @@ class recipe_list(webapp.RequestHandler):
 			user = User.get(self.request.get('user'))
 			query['user'] = user
 			
-		recipes_query = Recipe.all()
+		# XXX: need another way of checking whether a recipe is not just quickadded through the schedule (e.g. by running a check upon adding there, and having task queues run periodically)
+		recipes_query = Recipe.all().filter("method !=", None)
 		
 		if foodtype:
 			recipes_query = recipes_query.filter('foodtypes_list', foodtype)
