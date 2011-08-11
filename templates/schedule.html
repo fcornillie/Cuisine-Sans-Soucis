@@ -88,6 +88,7 @@ function modifySchedule(origin, action) {
 			json_response = eval('(' + response + ')');
 			if (json_response.result=="ADD_OK") {
 				var recipe_html = "<li key='" + json_response.recipe.key + "'><a href='/recipe?key=" + json_response.recipe.key + "'>" + json_response.recipe.name + "</a> [<a onclick='modifySchedule($(this), 2)'>remove</a>]</li>";
+				origin.blur();
 				date_li.children("div.meal ul.recipes").append(recipe_html);
 				date_li.children("div.meal input.quickadd").val("quickadd ...")
 				date_li.children("div.meal ul.query_result").html("")

@@ -163,14 +163,19 @@ class schedule_modify(webapp.RequestHandler):
 				# querying for existing recipes
 				recipe = Recipe.get(self.request.get("recipe"))
 			else:
-				# quickadding a new recipe
+				# check whether current user already has a recipe by that name
 				if self.request.get("recipe_name"):
-					recipe = Recipe(name=self.request.get("recipe_name"), author=helpers.get_current_user())
-					recipe.put()
+					recipe_query = Recipe.gql("WHERE author = :1 AND name = :2", helpers.get_current_user(), self.request.get("recipe_name"))
+					if recipe_query.count() > 0:
+						recipe = recipe_query[0]
+					else:
+						# quickadding a new recipe
+						recipe = Recipe(name=self.request.get("recipe_name"), author=helpers.get_current_user())
+						recipe.put()
 				else:
 					recipe = None
 			action = int(self.request.get("action"))
-			
+					
 			# first check whether recipe is already scheduled for that day
 			if recipe:
 				meal_query = Meal.gql("WHERE user = :1 AND date = :2 AND recipe = :3", helpers.get_current_user(), date, recipe)
