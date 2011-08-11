@@ -14,7 +14,7 @@
 						<li key="{{ meal.recipe.key }}"><a href="/recipe?key={{ meal.recipe.key }}">{{ meal.recipe.name }}</a> [<a onclick='modifySchedule($(this), 2)'>remove</a>]</li>
 					{% endfor %}
 				</ul>
-				<input class="quickadd" type="text" value="quickadd ..." />
+				<input class="quickadd" type="text" value="quickadd ..." onkeyup="onKeyUp($(this), event)" />
 				<ul class="query_result"></ul>
 			</div>
 			<div class="clearfloat"></div>
@@ -33,8 +33,15 @@ $("input.quickadd").focus(function() {
 $("input.quickadd").focusout(function() {
 	$(this).val("quickadd ...");
 });
-$("input.quickadd").keyup(function() {
-	var input = $(this);
+function onKeyUp(input, event) {
+	if( event.keyCode == 13 ) {
+		modifySchedule(input, 1);
+	}
+	else {
+		queryRecipes(input);
+	}
+}
+function queryRecipes(input) {
 	if(input.val().length > 1) {
 		input.parent().children("ul.query_result").html("");
 		input.parent().append(loader_html);
@@ -60,19 +67,28 @@ $("input.quickadd").keyup(function() {
 		input.parent().children("div.loading").remove();
 		input.parent().children("ul.query_result").html("");
 	}
-});
-function modifySchedule(button, action) {
-	var date_li = button.parentsUntil("li.date").parent();
-	var recipe = button.parent().attr("key");
+
+}
+function modifySchedule(origin, action) {
+	var date_li = origin.parentsUntil("li.date").parent();
 	var date = date_li.attr("key");
+	var recipe = origin.parent().attr("key");
+	var post_data = "";
+	if (recipe) {
+		post_data = "recipe=" + recipe + "&date=" + date + "&action=" + action;
+	} else {
+		var recipe_name = origin.val();
+		post_data = "recipe_name=" + recipe_name + "&date=" + date + "&action=" + action;
+	}
 	$.ajax({
 		type: "POST", 
 		url: "/schedule/modify", 
-		data: "recipe=" + recipe + "&date=" + date + "&action=" + action,
+		data: post_data,
 		success: function( response ) {
 			json_response = eval('(' + response + ')');
 			if (json_response.result=="ADD_OK") {
-				date_li.children("div.meal ul.recipes").append("<li key=" + json_response.recipe.key + "><a href='/recipe?key=" + json_response.recipe.key + "'>" + json_response.recipe.name + "</a> [<a onclick='modifySchedule($(this), 2)'>remove</a>]</li>");
+				var recipe_html = "<li key='" + json_response.recipe.key + "'><a href='/recipe?key=" + json_response.recipe.key + "'>" + json_response.recipe.name + "</a> [<a onclick='modifySchedule($(this), 2)'>remove</a>]</li>";
+				date_li.children("div.meal ul.recipes").append(recipe_html);
 				date_li.children("div.meal input.quickadd").val("quickadd ...")
 				date_li.children("div.meal ul.query_result").html("")
 			}

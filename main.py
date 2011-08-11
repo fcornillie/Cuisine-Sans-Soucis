@@ -159,41 +159,55 @@ class schedule_modify(webapp.RequestHandler):
 			import datetime
 			dateparts = [int(i) for i in self.request.get("date").split("_")]
 			date = datetime.datetime(dateparts[0], dateparts[1], dateparts[2])
-			recipe = Recipe.get(self.request.get("recipe"))
+			if self.request.get("recipe"):
+				# querying for existing recipes
+				recipe = Recipe.get(self.request.get("recipe"))
+			else:
+				# quickadding a new recipe
+				if self.request.get("recipe_name"):
+					recipe = Recipe(name=self.request.get("recipe_name"), author=helpers.get_current_user())
+					recipe.put()
+				else:
+					recipe = None
 			action = int(self.request.get("action"))
 			
 			# first check whether recipe is already scheduled for that day
-			meal_query = Meal.gql("WHERE user = :1 AND date = :2 AND recipe = :3", helpers.get_current_user(), date, recipe)
+			if recipe:
+				meal_query = Meal.gql("WHERE user = :1 AND date = :2 AND recipe = :3", helpers.get_current_user(), date, recipe)
+			else:
+				meal_query = None
 			
-			# adding a recipe
+			# adding a meal
 			if action==1:
-				if meal_query.count() > 0:
-					result = {'result':'ADD_ERROR'}
-				else:
-					# add new meal
-					meal = Meal(date=date, recipe=recipe, user=helpers.get_current_user())
-					meal.put()
-					result = {
-						'result':'ADD_OK',
-						'recipe':{
-							'key':str(recipe.key()),
-							'name':recipe.name,
+				if meal_query:
+					if meal_query.count() > 0:
+						result = {'result':'ADD_ERROR'}
+					else:
+						meal = Meal(date=date, recipe=recipe, user=helpers.get_current_user())
+						meal.put()
+						result = {
+							'result':'ADD_OK',
+							'recipe':{
+								'key':str(recipe.key()),
+								'name':recipe.name,
+							}
 						}
-					}
-			# removing a recipe
+			# removing a meal
 			elif action==2:
-				if meal_query.count() == 0:
-					result = {'result':'REMOVE_ERROR'}
-				else:
-					meal = meal_query[0]
-					meal.delete()
-					result = {
-						'result':'REMOVE_OK',
-						'recipe':{
-							'key':str(recipe.key()),
-							'name':recipe.name,
+				if meal_query:
+					if meal_query.count() == 0:
+						result = {'result':'REMOVE_ERROR'}
+					else:
+						meal = meal_query[0]
+						meal.delete()
+						result = {
+							'result':'REMOVE_OK',
+							'recipe':{
+								'key':str(recipe.key()),
+								'name':recipe.name,
+							}
 						}
-					}
+
 			
 			self.response.out.write(json.dumps(result))
 
