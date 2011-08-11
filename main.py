@@ -44,8 +44,8 @@ class recipe_list(webapp.RequestHandler):
 			user = User.get(self.request.get('user'))
 			query['user'] = user
 			
-		# XXX: need another way of checking whether a recipe is not just quickadded through the schedule (e.g. by running a check upon adding there, and having task queues run periodically)
-		recipes_query = Recipe.all().filter("method !=", None)
+		# XXX: need a coherent way of checking whether a recipe is not just quickadded through the schedule
+		recipes_query = Recipe.all().filter("quickadd", False)
 		
 		if foodtype:
 			recipes_query = recipes_query.filter('foodtypes_list', foodtype)
@@ -171,7 +171,7 @@ class schedule_modify(webapp.RequestHandler):
 						recipe = recipe_query[0]
 					else:
 						# quickadding a new recipe
-						recipe = Recipe(name=self.request.get("recipe_name"), author=helpers.get_current_user())
+						recipe = Recipe(name=self.request.get("recipe_name"), author=helpers.get_current_user(), quickadd=True)
 						recipe.put()
 				else:
 					recipe = None

@@ -88,6 +88,7 @@ class Recipe(db.Model):
 	image = db.BlobProperty()
 	season = db.StringProperty()
 	publish = db.StringProperty(choices=set(["no", "friends", "public"]))
+	quickadd = db.BooleanProperty(default=False)
 	timestamp = db.DateTimeProperty(auto_now_add=True)
 	
 	@property
