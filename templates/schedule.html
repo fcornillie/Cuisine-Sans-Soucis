@@ -15,7 +15,6 @@
 					{% endfor %}
 				</ul>
 				<input class="quickadd" type="text" value="quickadd ..." />
-				<div class="loading">loading ...</div>
 				<ul class="query_result"></ul>
 			</div>
 			<div class="clearfloat"></div>
@@ -25,6 +24,7 @@
 
 <div id="debug" style="color:red;">debug</div>
 <script type="text/javascript">
+var loader_html = "<div class='loading'>loading ...</div>";
 $("input.quickadd").focus(function() {
 	$("#schedule input.quickadd").val("quickadd ...");
 	$("#schedule ul.query_result").html("")
@@ -37,7 +37,7 @@ $("input.quickadd").keyup(function() {
 	var input = $(this);
 	if(input.val().length > 1) {
 		input.parent().children("ul.query_result").html("");
-		input.parent().children("div.loading").show();
+		input.parent().append(loader_html);
 		$.ajax({
 			type: "POST", 
 			url: "/recipe/jsonquery", 
@@ -52,12 +52,12 @@ $("input.quickadd").keyup(function() {
 				} else {
 					results_html += "no matching recipes found";
 				}
-				input.parent().children("div.loading").hide();
+				input.parent().children("div.loading").remove();
 				input.parent().children("ul.query_result").html(results_html);
 			}
 		});
 	} else {
-		input.parent().children("div.loading").hide();
+		input.parent().children("div.loading").remove();
 		input.parent().children("ul.query_result").html("");
 	}
 });

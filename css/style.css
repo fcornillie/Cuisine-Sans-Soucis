@@ -194,9 +194,6 @@ ul#schedule div.date {
 ul#schedule div.meal {
 	float:left;
 }
-.loading {
-	display:none;
-}
 input.quickadd {
 	width:200px;
 }
