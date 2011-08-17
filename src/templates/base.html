@@ -11,19 +11,18 @@
 	<script type='text/javascript' src='/js/jquery.jeditable.mini.js'></script>
 </head>
 
-<body onload="setTimeout(function() { window.scrollTo(0, 1) }, 100);"></body>
+<body onload="setTimeout(function() { window.scrollTo(0, 1) }, 100);">
 <div id="container">
 	<div id="header">
 		<div class="wrap">
 			<div id="logo">
-				<h1><a href="/" style="text-decoration:none;color:black;">YARB?</a></h1>
-				Yet Another Recipe Book?
+				<a href="/"><img src="/img/logo.png" alt="YARB?"/></a><br/>Yet Another Recipe Book?
 			</div>
 			<div id="nav">
 				<ul id="menu">
-					<li><a href="/schedule"><img src="/img/calendar.png" class="{% block schedule_status %}{% endblock %}" /></a></li>
-					<li><a href="/recipes"><img src="/img/coffee_cup.png" class="{% block recipes_status %}{% endblock %}" /></a></li>
-					<li><a href="/profile"><img src="/img/user.png" class="{% block profile_status %}{% endblock %}" /></a></li>
+					<li><a href="/schedule"><img src="/img/calendar.png" alt="schedule" class="{% block schedule_status %}{% endblock %}" /></a></li>
+					<li><a href="/recipes"><img src="/img/coffee_cup.png" alt="recipes" class="{% block recipes_status %}{% endblock %}" /></a></li>
+					<li><a href="/profile"><img src="/img/user.png" alt="profile" class="{% block profile_status %}{% endblock %}" /></a></li>
 				</ul>
 			</div>
 		</div>
