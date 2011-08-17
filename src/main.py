@@ -126,13 +126,6 @@ class schedule(webapp.RequestHandler):
 	def get(self):
 		import datetime
 		
-		if self.request.get("user"):
-			user = User.get(self.request.get("user"))
-		else:
-			user = helpers.get_current_user()
-		
-		meals = Meal.all().filter('user', user).filter('date >=', datetime.date.today()).order('date')
-		
 		schedule = []
 		if self.request.get('future_days'):
 			future_days = self.request.get('future_days')
@@ -242,7 +235,6 @@ class get_image(webapp.RequestHandler):
 
 	@login_required
 	def get(self):
-		from google.appengine.ext import db
 		object = db.Model.get(self.request.get('object_key'))
 		image_data = object.image
 		self.response.headers['Content-Type'] = 'image/jpeg'
@@ -287,7 +279,6 @@ def main():
 		('/get_image', get_image),
 		('/import_content', import_content),
 	], debug=True)
-	from google.appengine.ext.webapp import template
 	template.register_template_library('django.contrib.humanize.templatetags.humanize')
 	util.run_wsgi_app(application)
 

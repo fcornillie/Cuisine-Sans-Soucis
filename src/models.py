@@ -7,9 +7,7 @@ class User(db.Model):
 	"""
 	Our user.
 	"""
-	
-	from datetime import datetime
-	
+		
 	user = db.UserProperty()
 	joined_date = db.DateTimeProperty(auto_now_add=True)
 	friends_list = db.ListProperty(db.Key)		# XX ListProperties are limited to 5000 entries
@@ -36,7 +34,7 @@ class User(db.Model):
 			if keys_only:
 				return self.friends_list
 			else:
-				return Player.get(self.friends_list)
+				return User.get(self.friends_list)
 		else:
 			return []
 	

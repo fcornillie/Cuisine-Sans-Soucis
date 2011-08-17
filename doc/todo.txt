@@ -1,0 +1,43 @@
+Author: Frederik Cornillie <frederik.cornillie@gmail.com>
+Created: May 9th, 2011
+
+1. possible names
+
+cookery
+chef
+cuisine
+kitchen
+
+suggester
+agent
+friend
+machine
+
+cuisine machine *
+cookery agent
+
+* already taken
+
+2. todo
+- entry form
++ validate input
++ foodtype on entry form
+- quickadd
+v 'loading'
+v pick a suggestion
++ 'type' in results list
++ query foodtype
+v multiple per day
+- planner
+- social stuff
++ authentication through FB Connect
++ recipe rating
++ recommend recipe
++ invite guest to meal
++ validation of cooking & preparation time
++ FB like / Plus +1
++ leaderboard?
+- styling
++ iphone home button
++ logo
++ icons
