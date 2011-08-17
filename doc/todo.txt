@@ -19,16 +19,23 @@ cookery agent
 * already taken
 
 2. todo
+
 - entry form
 + validate input
 + foodtype on entry form
+
+- schedule 
++ load more/history
+
 - quickadd
 v 'loading'
 v pick a suggestion
 + 'type' in results list
 + query foodtype
 v multiple per day
+
 - planner
+
 - social stuff
 + authentication through FB Connect
 + recipe rating
@@ -37,6 +44,7 @@ v multiple per day
 + validation of cooking & preparation time
 + FB like / Plus +1
 + leaderboard?
+
 - styling
 + iphone home button
 + logo
