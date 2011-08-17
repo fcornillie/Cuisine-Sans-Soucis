@@ -117,7 +117,7 @@ div#nav{
 
 }
 #header ul#menu li a:hover{
-	color:grey;
+	color:gray;
 }
 #header ul#menu img {
 	padding-bottom: 5px;
@@ -189,7 +189,7 @@ ul#schedule {
 ul#schedule div.date {
 	float:left;
 	width:100px;
-	color:grey;
+	color:gray;
 }
 ul#schedule div.meal {
 	float:left;
@@ -220,7 +220,7 @@ ul.query_result li a:hover{
 /*--- iPhone only CSS here ---*/
 
 body{
-	padding:0px;
+	padding:5px;
 	width:auto;
 	-webkit-text-size-adjust:none;
 	font-family:Helvetica, Arial, Verdana, sans-serif;
