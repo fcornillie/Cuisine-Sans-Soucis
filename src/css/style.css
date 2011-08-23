@@ -186,6 +186,15 @@ span.recipe_name a {
 ul#schedule {
 	list-style-type:none;
 }
+ul#schedule li.date {
+	border-bottom: 1px solid #aaa;
+	padding: 8px 0 8px 0;
+}
+ul#schedule li.date:last-child {
+	border-bottom: none;
+	padding: 8px 0 8px 0;
+}
+
 ul#schedule div.date {
 	float:left;
 	width:100px;

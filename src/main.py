@@ -189,6 +189,7 @@ class schedule_modify(webapp.RequestHandler):
 							'recipe':{
 								'key':str(recipe.key()),
 								'name':recipe.name,
+								'type':recipe.type,
 							}
 						}
 			# removing a meal
@@ -203,10 +204,8 @@ class schedule_modify(webapp.RequestHandler):
 							'result':'REMOVE_OK',
 							'recipe':{
 								'key':str(recipe.key()),
-								'name':recipe.name,
 							}
 						}
-
 			
 			self.response.out.write(json.dumps(result))
 

@@ -24,6 +24,9 @@ cookery agent
 + validate input
 + foodtype on entry form
 
+- list
++ favourite
+
 - schedule 
 + load more/history
 
@@ -32,6 +35,7 @@ v 'loading'
 v pick a suggestion
 + 'type' in results list
 + query foodtype
++ full text search: http://www.billkatz.com/2009/6/Simple-Full-Text-Search-for-App-Engine
 v multiple per day
 
 - planner
@@ -40,7 +44,8 @@ v multiple per day
 + authentication through FB Connect
 + recipe rating
 + recommend recipe
-+ invite guest to meal
++ invite guest to meal (via Google Calendar?)
++ Google Calendar integration?
 + validation of cooking & preparation time
 + FB like / Plus +1
 + leaderboard?

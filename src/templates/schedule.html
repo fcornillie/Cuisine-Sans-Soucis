@@ -3,35 +3,41 @@
 {% block schedule_status %}active{% endblock %}
 
 {% block content %}
-
+<a href="#">[previous]</a>
 <ul id="schedule">
 	{% for day in schedule %}
 		<li class="date" key='{{ day.date|date:"Y_n_j" }}'>
 			<div class="date">{{ day.date|naturalday:"l" }}</div>
 			<div class="meal">
+				<div class="add">
+					<img class="add" src="/img/add_16.png"/>
+				</div>
 				<ul class="recipes">
 					{% for meal in day.meals %}
-						<li key="{{ meal.recipe.key }}"><a href="/recipe?key={{ meal.recipe.key }}">{{ meal.recipe.name }}</a> [<a onclick='modifySchedule($(this), 2)'>remove</a>]</li>
+						<li key="{{ meal.recipe.key }}"><a onclick='modifySchedule($(this), 2)'><img src='/img/delete_16.png'/></a> [{{ meal.recipe.type }}] <a href="/recipe?key={{ meal.recipe.key }}">{{ meal.recipe.name }}</a></li>
 					{% endfor %}
 				</ul>
-				<input class="quickadd" type="text" value="quickadd ..." onkeyup="onKeyUp($(this), event)" />
-				<ul class="query_result"></ul>
 			</div>
 			<div class="clearfloat"></div>
 		</li>
 	{% endfor %}
 </ul>
+<a href="#">[next]</a>
 
-<div id="debug" style="color:red;">debug</div>
 <script type="text/javascript">
 var loader_html = "<div class='loading'>loading ...</div>";
-$("input.quickadd").focus(function() {
-	$("#schedule input.quickadd").val("quickadd ...");
-	$("#schedule ul.query_result").html("")
-	$(this).val("");
+$("img.add").live("click", function() {
+	var html = "<input class='quickadd' type='text' value='' onkeyup='onKeyUp($(this), event)' />";
+	html += "<ul class='query_result'></ul>";
+	$(this).parent().append(html);
+	$(this).parent().find("input.quickadd").focus();
+	
 });
-$("input.quickadd").focusout(function() {
-	$(this).val("quickadd ...");
+$("input.quickadd").live("focusout", function(event) {
+	//var quickadd = $(this).parent().find("input.quickadd");
+	//var query_results = $(this).parent().find("ul.query_result");
+	//quickadd.remove();
+	//query_results.remove();
 });
 function onKeyUp(input, event) {
 	if( event.keyCode == 13 ) {
@@ -87,16 +93,15 @@ function modifySchedule(origin, action) {
 		success: function( response ) {
 			json_response = eval('(' + response + ')');
 			if (json_response.result=="ADD_OK") {
-				var recipe_html = "<li key='" + json_response.recipe.key + "'><a href='/recipe?key=" + json_response.recipe.key + "'>" + json_response.recipe.name + "</a> [<a onclick='modifySchedule($(this), 2)'>remove</a>]</li>";
+				var recipe_html = "<li key='" + json_response.recipe.key + "'><a onclick='modifySchedule($(this), 2)'><img src='/img/delete_16.png'/></a> [" + json_response.recipe.type + "] <a href='/recipe?key=" + json_response.recipe.key + "'>" + json_response.recipe.name + "</a></li>";
 				origin.blur();
-				date_li.find("input.quickadd").val("quickadd ...")
-				date_li.find("ul.query_result").html("")
+				date_li.find("ul.query_result").remove();
+				date_li.find("input.quickadd").remove();
 				date_li.find("ul.recipes").append(recipe_html);
 			}
 			if (json_response.result=="REMOVE_OK") {
 				date_li.find("li[key='" + recipe +"']").remove();
 			}
-			date_li.find("input.quickadd").focus();
 		}
 	});
 }
