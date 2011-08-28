@@ -5,6 +5,33 @@
 {% block content %}
 {{ user.nickname }}
 
+<div id="todo">
+	<h2>Todo list</h2>
+	<ul id="todo">
+		{% for t in todo %}
+			<li>{% ifequal t.entity_type "Guest" %}RATE <a href="/recipe?key={{ t.meal.recipe.key }}">{{ t.meal.recipe.name }}<a> at <a href="/profile?user={{ t.meal.user.key }}">{{ t.meal.user.nickname }}</a>'s place{% endifequal %}</li>
+		{% endfor %}
+	</ul>
+</div>
+
+<div id="likes">
+	<h2>Likes</h2>
+	<ul>
+	{% for ft in foodtypes %}
+		<li>{{ ft.name }}</li>
+	{% endfor %}
+	</ul>
+</div>
+
+<div id="friends">
+	<h2>Friends</h2>
+	<ul>
+	{% for friend in user.friends %}
+		<li>{{ friend.nickname }}</li>
+	{% endfor %}
+	</ul>
+</div>
+
 <br/>&nbsp;<br/>Full user profile here: likes/dislikes, favourite recipes, tracking & logging details (number of recipes cooked, contributed, etc.), friends, etc etc.
 
 {% endblock %}

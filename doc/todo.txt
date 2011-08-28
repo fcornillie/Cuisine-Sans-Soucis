@@ -28,7 +28,8 @@ cookery agent
 + favourite
 
 - schedule 
-+ load more/history
+v load more/history
++ show invited meals
 
 - quickadd
 v 'loading'

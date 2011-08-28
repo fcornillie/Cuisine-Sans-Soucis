@@ -31,7 +31,7 @@ def append_base_template_values(template_values):
 	"""
 	
 	user = get_current_user()
-	template_values['user'] = user
+	template_values['current_user'] = user
 	template_values['logouturl'] = users.create_logout_url("/")
 	template_values['is_current_user_admin'] = users.is_current_user_admin()
 	import datetime

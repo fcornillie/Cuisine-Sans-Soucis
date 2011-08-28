@@ -38,35 +38,38 @@ class User(db.Model):
 		else:
 			return []
 	
-	def friend(self, player_key):
+	def friend(self, user_key):
 		"""
-		Adds a Player to the list of friends.
+		Adds a User to the list of friends. Friending is birectional.
 		
-		Requires the key of the Player instance.
+		Requires the key of the User instance.
 		
-		Returns True if the Player has been added to the list. Returns False if the Player was already friended.
+		Returns True if the User has been added to the list. Returns False if the User was already friended.
 		"""
-		if player_key != self.key():		# obviously you cannot friend yourself
+		if user_key != self.key():		# obviously you cannot friend yourself
 			try:
-				self.friends_list.index(player_key)
+				self.friends_list.index(user_key)
 				return False
 			except ValueError:
-				self.friends_list.append(player_key)
+				self.friends_list.append(user_key)
 				self.put()
+				user = User.get(user_key)	# friending is birectional
+				user.friends_list.append(self.key())
+				user.put()
 				return True
 	
-	def defriend(self, player_key):
+	def defriend(self, user_key):
 		"""
-		Removes a Player from the list of friends.
+		Removes a User from the list of friends.
 		
-		Requires the key of the Player instance.
+		Requires the key of the User instance.
 		
-		Returns True if the Player has been removed from the list. Returns False if the Player was not in the list.
+		Returns True if the User has been removed from the list. Returns False if the User was not in the list.
 		"""
-		if player_key != self.key():		# obviously you cannot defriend yourself
+		if user_key != self.key():		# obviously you cannot defriend yourself
 			try:
-				self.friends_list.index(player_key)
-				self.friends_list.remove(player_key)
+				self.friends_list.index(user_key)
+				self.friends_list.remove(user_key)
 				self.put()
 				return True
 			except ValueError:
@@ -110,13 +113,6 @@ class FoodType(db.Model):
 class Ingredient(db.Model):
 	name = db.StringProperty()
 
-class MealGuest(db.Model):
-	""" A GuestMeal represents a guest who is invited to a meal. """
-	
-	user = db.ReferenceProperty(User)
-	status = db.StringProperty(choices=set(["yes", "no", "maybe"]))
-	food_rating = db.RatingProperty()
-	
 class Meal(db.Model):
 	""" A Meal represents one instance where a User prepares and devours a Meal. """
 	
@@ -124,9 +120,16 @@ class Meal(db.Model):
 	recipe = db.ReferenceProperty(Recipe)
 	user = db.ReferenceProperty(User)
 	rating = db.RatingProperty()
-	guests = db.ReferenceProperty(MealGuest)
 	preparation_time = db.IntegerProperty()
 	cooking_time = db.IntegerProperty()
 	
 	def to_dict(self):
 		return dict([(p, unicode(getattr(self, p))) for p in self.properties()])
+
+class Guest(db.Model):
+	""" A GuestMeal represents a guest who is invited to a meal. """
+	
+	meal = db.ReferenceProperty(Meal, collection_name="guests")
+	user = db.ReferenceProperty(User)
+	attending = db.StringProperty(choices=set(["yes", "no", "maybe"]))
+	food_rating = db.RatingProperty()

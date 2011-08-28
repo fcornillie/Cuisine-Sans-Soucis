@@ -27,6 +27,7 @@ from google.appengine.api import users
 from django.utils import simplejson as json
 from models import *
 import helpers
+import datetime
 
 import logging
 
@@ -124,8 +125,6 @@ class recipe_jsonquery(webapp.RequestHandler):
 class schedule(webapp.RequestHandler):
 	@login_required
 	def get(self):
-		import datetime
-		
 		format = self.request.get('format').lower()
 		schedule = []
 		
@@ -170,7 +169,6 @@ class schedule_modify(webapp.RequestHandler):
 	def post(self):
 		user = users.get_current_user()
 		if user:
-			import datetime
 			dateparts = [int(i) for i in self.request.get("date").split("-")]
 			date = datetime.datetime(dateparts[0], dateparts[1], dateparts[2])
 			if self.request.get("recipe"):
@@ -237,9 +235,21 @@ class profile_detail(webapp.RequestHandler):
 			user = User.get(self.request.get("user"))
 		else:
 			user = helpers.get_current_user()
+		
+		todo = []
+		
+		meals_to_be_rated = []
+		guest_query = Guest.all().filter('user', user).filter('attending', 'yes').filter('food_rating', None)
+		for g in guest_query:
+			if g.meal.date < datetime.datetime.today():
+				meals_to_be_rated.append(g)
 			
+		todo.extend(meals_to_be_rated)
+		
 		template_values = {
 			'user':user,
+			'foodtypes':FoodType.all(),
+			'todo':todo,
 		}
 		
 		path = os.path.join(os.path.dirname(__file__), 'templates/profile_detail.html')
