@@ -100,6 +100,9 @@ class Recipe(db.Model):
 	@property
 	def rating(self):
 		return "***"
+	
+	def to_dict(self):
+		return dict([(p, unicode(getattr(self, p))) for p in self.properties()])		
 
 class FoodType(db.Model):
 	name = db.CategoryProperty()
@@ -107,6 +110,13 @@ class FoodType(db.Model):
 class Ingredient(db.Model):
 	name = db.StringProperty()
 
+class MealGuest(db.Model):
+	""" A GuestMeal represents a guest who is invited to a meal. """
+	
+	user = db.ReferenceProperty(User)
+	status = db.StringProperty(choices=set(["yes", "no", "maybe"]))
+	food_rating = db.RatingProperty()
+	
 class Meal(db.Model):
 	""" A Meal represents one instance where a User prepares and devours a Meal. """
 	
@@ -114,5 +124,9 @@ class Meal(db.Model):
 	recipe = db.ReferenceProperty(Recipe)
 	user = db.ReferenceProperty(User)
 	rating = db.RatingProperty()
+	guests = db.ReferenceProperty(MealGuest)
 	preparation_time = db.IntegerProperty()
 	cooking_time = db.IntegerProperty()
+	
+	def to_dict(self):
+		return dict([(p, unicode(getattr(self, p))) for p in self.properties()])

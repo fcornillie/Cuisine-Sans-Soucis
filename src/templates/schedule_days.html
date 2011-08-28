@@ -1,0 +1,16 @@
+{% for day in schedule %}
+	<li class="date{% ifequal day.date today %} today{% endifequal %}" key='{{ day.date|date:"Y-n-j" }}'>
+		<div class="date">{{ day.date|naturalday:"l" }}</div>
+		<div class="meal">
+			<div class="add">
+				<img class="add" src="/img/add_16.png"/>
+			</div>
+			<ul class="recipes">
+				{% for meal in day.meals %}
+					<li key="{{ meal.recipe.key }}"><a onclick='modifySchedule($(this), 2)'><img src='/img/delete_16.png'/></a> [{{ meal.recipe.type }}] <a href="/recipe?key={{ meal.recipe.key }}">{{ meal.recipe.name }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+		<div class="clearfloat"></div>
+	</li>
+{% endfor %}

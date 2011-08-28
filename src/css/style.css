@@ -194,7 +194,9 @@ ul#schedule li.date:last-child {
 	border-bottom: none;
 	padding: 8px 0 8px 0;
 }
-
+ul#schedule li.today {
+	background-color:#e1e1e1;
+}
 ul#schedule div.date {
 	float:left;
 	width:100px;

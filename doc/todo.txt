@@ -40,9 +40,13 @@ v multiple per day
 
 - planner
 
+- profile
++ privacy: who can see my schedule? (friends, everyone, nobody)
+
 - social stuff
 + authentication through FB Connect
 + recipe rating
++ meal rating
 + recommend recipe
 + invite guest to meal (via Google Calendar?)
 + Google Calendar integration?

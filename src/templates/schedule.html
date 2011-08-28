@@ -3,26 +3,11 @@
 {% block schedule_status %}active{% endblock %}
 
 {% block content %}
-<a href="#">[previous]</a>
+<button id='back' class='getschedule'>previous</button>
 <ul id="schedule">
-	{% for day in schedule %}
-		<li class="date" key='{{ day.date|date:"Y_n_j" }}'>
-			<div class="date">{{ day.date|naturalday:"l" }}</div>
-			<div class="meal">
-				<div class="add">
-					<img class="add" src="/img/add_16.png"/>
-				</div>
-				<ul class="recipes">
-					{% for meal in day.meals %}
-						<li key="{{ meal.recipe.key }}"><a onclick='modifySchedule($(this), 2)'><img src='/img/delete_16.png'/></a> [{{ meal.recipe.type }}] <a href="/recipe?key={{ meal.recipe.key }}">{{ meal.recipe.name }}</a></li>
-					{% endfor %}
-				</ul>
-			</div>
-			<div class="clearfloat"></div>
-		</li>
-	{% endfor %}
+	{% include 'schedule_days.html' %}
 </ul>
-<a href="#">[next]</a>
+<button id='forward' class='getschedule'>next</button>
 
 <script type="text/javascript">
 var loader_html = "<div class='loading'>loading ...</div>";
@@ -101,6 +86,31 @@ function modifySchedule(origin, action) {
 			}
 			if (json_response.result=="REMOVE_OK") {
 				date_li.find("li[key='" + recipe +"']").remove();
+			}
+		}
+	});
+}
+$("button.getschedule").live("click", function(event) {
+	getSchedule(this);
+});
+function getSchedule(button) {
+	schedule = $(document).find("ul#schedule");
+	if (button.id=='back') {
+		start_date = schedule.children(":first").attr("key");
+	}
+	if (button.id=='forward') {
+		start_date = schedule.children(":last").attr("key");
+	}
+	$.ajax({
+		type: "GET", 
+		url: "/schedule", 
+		data: "format=partial&direction="+button.id+"&start_date="+start_date,
+		success: function( response ) {
+			if (button.id=='back') {
+				$(document).find("ul#schedule").prepend(response);
+			}
+			if (button.id=='forward') {
+				$(document).find("ul#schedule").append(response);
 			}
 		}
 	});

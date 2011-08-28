@@ -126,32 +126,52 @@ class schedule(webapp.RequestHandler):
 	def get(self):
 		import datetime
 		
+		format = self.request.get('format').lower()
 		schedule = []
-		if self.request.get('future_days'):
-			future_days = self.request.get('future_days')
+		
+		if self.request.get('start_date'):
+			dateparts = [int(i) for i in self.request.get("start_date").split("-")]
+			start_date = datetime.date(dateparts[0], dateparts[1], dateparts[2])
 		else:
-			from settings import DEFAULT_FUTURE_DAYS
-			future_days = DEFAULT_FUTURE_DAYS		
-		for i in range(0, future_days):
+			start_date = datetime.date.today()
+		if self.request.get('nof_days'):
+			nof_days = self.request.get('nof_days')
+		else:
+			from settings import SCHEDULE_DEFAULT_NUMBER_OF_DAYS
+			nof_days = SCHEDULE_DEFAULT_NUMBER_OF_DAYS
+		if self.request.get('direction')=='back':
+			start_date -= datetime.timedelta(nof_days)
+		if self.request.get('direction')=='forward':
+			start_date += datetime.timedelta(1)
+		
+		for i in range(nof_days):
+			date_next = start_date+datetime.timedelta(i)
+			meal_query = Meal.gql("WHERE user = :1 AND date = :2", helpers.get_current_user(), date_next)
 			date = {
-				'date':datetime.date.today()+datetime.timedelta(i),
-				'meals':Meal.gql("WHERE user = :1 AND date = :2", helpers.get_current_user(), datetime.date.today()+datetime.timedelta(i)),
+				'date':date_next,
+				'meals':meal_query,
 			}
 			schedule.append(date)
-
-		template_values = {
-			'schedule':schedule,
-		}
-		
-		path = os.path.join(os.path.dirname(__file__), 'templates/schedule.html')
-		self.response.out.write(template.render(path, helpers.append_base_template_values(template_values)))
+			
+		if format == 'partial':
+			template_values = {
+				'schedule':schedule,
+			}
+			path = os.path.join(os.path.dirname(__file__), 'templates/schedule_days.html')
+			self.response.out.write(template.render(path, template_values))
+		else:
+			template_values = {
+				'schedule':schedule,
+			}
+			path = os.path.join(os.path.dirname(__file__), 'templates/schedule.html')
+			self.response.out.write(template.render(path, helpers.append_base_template_values(template_values)))
 
 class schedule_modify(webapp.RequestHandler):
 	def post(self):
 		user = users.get_current_user()
 		if user:
 			import datetime
-			dateparts = [int(i) for i in self.request.get("date").split("_")]
+			dateparts = [int(i) for i in self.request.get("date").split("-")]
 			date = datetime.datetime(dateparts[0], dateparts[1], dateparts[2])
 			if self.request.get("recipe"):
 				# querying for existing recipes
