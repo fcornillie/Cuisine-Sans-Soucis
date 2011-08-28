@@ -18,7 +18,7 @@
 	<h2>Likes</h2>
 	<ul>
 	{% for ft in foodtypes %}
-		<li>{{ ft.name }}</li>
+		<li>{{ ft.name }} yes | no</li>
 	{% endfor %}
 	</ul>
 </div>
@@ -27,7 +27,7 @@
 	<h2>Friends</h2>
 	<ul>
 	{% for friend in user.friends %}
-		<li>{{ friend.nickname }}</li>
+		<li><a href="/profile?user={{ friend.key }}">{{ friend.nickname }}</a></li>
 	{% endfor %}
 	</ul>
 </div>
