@@ -15,7 +15,7 @@
 	<div class="img_recipe_detail">{% if recipe.image %}<img class="recipe_detail" src="/get_image?object_key={{ recipe.key }}" />{% endif %}</div>
 	<p>&nbsp;<br/>{{ recipe.author.nickname }} on {{ recipe.timestamp }}</p>
 	
-	{% ifequal recipe.author.key user.key %}
+	{% ifequal recipe.author.key current_user.key %}
 	<script type="text/javascript">
 	$(document).ready(function() {
 		$('.edit').editable('/recipe/edit', {
