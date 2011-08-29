@@ -9,7 +9,7 @@
 	<h2>Todo list</h2>
 	<ul id="todo">
 		{% for t in todo %}
-			<li>{% ifequal t.entity_type "Invitation" %}RATE <a href="/recipe?key={{ t.meal.recipe.key }}">{{ t.meal.recipe.name }}<a> at <a href="/profile?user={{ t.meal.guest.key }}">{{ t.meal.guest.nickname }}</a>'s place{% endifequal %}</li>
+			<li>{% ifequal t.entity_type "Invitation" %}RATE <a href="/recipe?key={{ t.meal.recipe.key }}">{{ t.meal.recipe.name }}<a> at <a href="/profile?user={{ t.meal.user.key }}">{{ t.meal.user.nickname }}</a>'s place{% endifequal %}</li>
 		{% endfor %}
 	</ul>
 </div>
