@@ -133,6 +133,7 @@ class Meal(db.Model):
 class Invitation(db.Model):
 	""" An Invitation happens when a user is invited as a guest to a meal cooked by another user. """
 	
+	date = db.DateTimeProperty()		# the meal referent already has a date, however, the date field of Invitation is not redundant. We need a quick way of querying invitations for one day, and since GAE does not support JOIN queries, this is way one to do this.
 	meal = db.ReferenceProperty(Meal, collection_name="invitations")
 	guest = db.ReferenceProperty(User)
 	attending = db.StringProperty(choices=set(["yes", "no", "maybe"]))

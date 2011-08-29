@@ -145,10 +145,13 @@ class schedule(webapp.RequestHandler):
 		
 		for i in range(nof_days):
 			date_next = start_date+datetime.timedelta(i)
-			meal_query = Meal.gql("WHERE user = :1 AND date = :2", helpers.get_current_user(), date_next)
+			user = helpers.get_current_user()
+			meal_query = Meal.gql("WHERE user = :1 AND date = :2", user, date_next)
+			invitations_query = Invitation.gql("WHERE guest = :1 AND date = :2", user, date_next)
 			date = {
 				'date':date_next,
 				'meals':meal_query,
+				'invitations':invitations_query,
 			}
 			schedule.append(date)
 			
