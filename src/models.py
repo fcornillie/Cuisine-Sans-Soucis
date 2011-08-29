@@ -127,6 +127,10 @@ class Meal(db.Model):
 	preparation_time = db.IntegerProperty()
 	cooking_time = db.IntegerProperty()
 	
+	@property
+	def guests(self):
+		return [i.guest for i in self.invitations]
+	
 	def to_dict(self):
 		return dict([(p, unicode(getattr(self, p))) for p in self.properties()])
 

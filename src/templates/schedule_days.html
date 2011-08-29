@@ -7,7 +7,7 @@
 			</div>
 			<ul class="recipes">
 				{% for meal in day.meals %}
-					<li key="{{ meal.recipe.key }}"><a onclick='modifySchedule($(this), 2)'><img src='/img/delete_16.png'/></a> [{{ meal.recipe.type }}] <a href="/recipe?key={{ meal.recipe.key }}">{{ meal.recipe.name }}</a></li>
+					<li key="{{ meal.recipe.key }}"><a onclick='modifySchedule($(this), 2)'><img src='/img/delete_16.png'/></a> [{{ meal.recipe.type }}] <a href="/recipe?key={{ meal.recipe.key }}">{{ meal.recipe.name }}</a>{% if meal.invitations %} guests: {% for i in meal.invitations %}<a href="/profile?user={{ i.guest.key }}">{{ i.guest.nickname }} {% endfor %}{% endif %}</li>
 				{% endfor %}
 				{% for invitation in day.invitations %}
 					<li key="{{ invitation.meal.recipe.key }}">[INVITATION] {% if invitation.date > today %}{% else %}Going? <select name='status'>{% if invitation.attending == None %}<option>choose</option>{% endif %}<option value='yes'{% if invitation.attending == 'yes' %} selected='selected'{% endif %}>yes</option><option value='no'{% if invitation.attending == 'no' %} selected='selected'{% endif %}>no</option><option value='maybe'{% if invitation.attending == 'maybe' %} selected='selected'{% endif %}>maybe</option></select> {% endif %}[{{ invitation.meal.recipe.type }}] <a href="/recipe?key={{ invitation.meal.recipe.key }}">{{ invitation.meal.recipe.name }}</a></li>

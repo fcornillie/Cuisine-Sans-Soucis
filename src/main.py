@@ -127,6 +127,11 @@ class schedule(webapp.RequestHandler):
 	def get(self):
 		format = self.request.get('format').lower()
 		schedule = []
+
+		if self.request.get("user"):
+			user = User.get(self.request.get("user"))
+		else:
+			user = helpers.get_current_user()
 		
 		if self.request.get('start_date'):
 			dateparts = [int(i) for i in self.request.get("start_date").split("-")]
@@ -145,7 +150,6 @@ class schedule(webapp.RequestHandler):
 		
 		for i in range(nof_days):
 			date_next = start_date+datetime.timedelta(i)
-			user = helpers.get_current_user()
 			meal_query = Meal.gql("WHERE user = :1 AND date = :2", user, date_next)
 			invitations_query = Invitation.gql("WHERE guest = :1 AND date = :2", user, date_next)
 			date = {
