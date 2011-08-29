@@ -43,6 +43,7 @@ v multiple per day
 
 - profile
 + privacy: who can see my schedule? (friends, everyone, nobody)
+v fix recipe counter
 
 - social stuff
 + authentication through FB Connect

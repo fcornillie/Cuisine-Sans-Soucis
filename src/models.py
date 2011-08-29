@@ -130,10 +130,10 @@ class Meal(db.Model):
 	def to_dict(self):
 		return dict([(p, unicode(getattr(self, p))) for p in self.properties()])
 
-class Guest(db.Model):
-	""" A GuestMeal represents a guest who is invited to a meal. """
+class Invitation(db.Model):
+	""" An Invitation happens when a user is invited as a guest to a meal cooked by another user. """
 	
-	meal = db.ReferenceProperty(Meal, collection_name="guests")
-	user = db.ReferenceProperty(User)
+	meal = db.ReferenceProperty(Meal, collection_name="invitations")
+	guest = db.ReferenceProperty(User)
 	attending = db.StringProperty(choices=set(["yes", "no", "maybe"]))
 	food_rating = db.RatingProperty()

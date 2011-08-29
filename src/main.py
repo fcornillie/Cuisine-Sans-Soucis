@@ -239,10 +239,10 @@ class profile_detail(webapp.RequestHandler):
 		todo = []
 		
 		meals_to_be_rated = []
-		guest_query = Guest.all().filter('user', user).filter('attending', 'yes').filter('food_rating', None)
-		for g in guest_query:
-			if g.meal.date < datetime.datetime.today():
-				meals_to_be_rated.append(g)
+		invitation_query = Invitation.all().filter('guest', user).filter('attending', 'yes').filter('food_rating', None)
+		for i in invitation_query:
+			if i.meal.date < datetime.datetime.today():
+				meals_to_be_rated.append(i)
 			
 		todo.extend(meals_to_be_rated)
 		
