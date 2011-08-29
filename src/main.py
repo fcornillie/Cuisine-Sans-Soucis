@@ -254,6 +254,11 @@ class profile_detail(webapp.RequestHandler):
 		
 		path = os.path.join(os.path.dirname(__file__), 'templates/profile_detail.html')
 		self.response.out.write(template.render(path, helpers.append_base_template_values(template_values)))
+
+class about(webapp.RequestHandler):
+	def get(self):
+		path = os.path.join(os.path.dirname(__file__), 'templates/about.html')
+		self.response.out.write(template.render(path, helpers.append_base_template_values()))
 	
 class get_image(webapp.RequestHandler):
 	""" Gets the image data for a certain object.
@@ -305,6 +310,7 @@ def main():
 		('/schedule', schedule),
 		('/schedule/modify', schedule_modify),
 		('/profile', profile_detail),
+		('/about', about),
 		('/get_image', get_image),
 		('/import_content', import_content),
 	], debug=True)

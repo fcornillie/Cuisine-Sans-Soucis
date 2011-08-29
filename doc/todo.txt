@@ -56,6 +56,6 @@ v multiple per day
 + leaderboard?
 
 - styling
-+ iphone home button
+v iphone home button
 + logo
 + icons

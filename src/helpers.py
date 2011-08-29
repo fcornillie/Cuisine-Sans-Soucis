@@ -21,7 +21,7 @@ def get_current_user():
 		
 	return user
 
-def append_base_template_values(template_values):
+def append_base_template_values(template_values={}):
 	"""
 	Appends the values for the base template to the values for the requested view. The appended values are:
 	- user: the current user
