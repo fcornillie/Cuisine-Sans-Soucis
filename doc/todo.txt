@@ -30,6 +30,8 @@ cookery agent
 - schedule 
 v load more/history
 v show invited meals
++ when showing someone else's schedule, prevent from modifying, etc.
++ chronology: prevent changing meals in history, etc.
 
 - quickadd
 v 'loading'

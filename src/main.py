@@ -167,6 +167,7 @@ class schedule(webapp.RequestHandler):
 			self.response.out.write(template.render(path, template_values))
 		else:
 			template_values = {
+				'user':user,
 				'schedule':schedule,
 			}
 			path = os.path.join(os.path.dirname(__file__), 'templates/schedule.html')

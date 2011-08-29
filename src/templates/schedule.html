@@ -4,7 +4,7 @@
 
 {% block content %}
 <button id='back' class='getschedule'>previous</button>
-<ul id="schedule">
+<ul id="schedule" user="{{ user.key }}">
 	{% include 'schedule_days.html' %}
 </ul>
 <button id='forward' class='getschedule'>next</button>
@@ -95,16 +95,19 @@ $("button.getschedule").live("click", function(event) {
 });
 function getSchedule(button) {
 	schedule = $(document).find("ul#schedule");
+	user = schedule.attr("user");
 	if (button.id=='back') {
 		start_date = schedule.children(":first").attr("key");
 	}
 	if (button.id=='forward') {
 		start_date = schedule.children(":last").attr("key");
 	}
+	var data = "format=partial&direction="+button.id+"&start_date="+start_date;
+	if (user) {data += "&user="+user};
 	$.ajax({
 		type: "GET", 
 		url: "/schedule", 
-		data: "format=partial&direction="+button.id+"&start_date="+start_date,
+		data: data,
 		success: function( response ) {
 			if (button.id=='back') {
 				$(document).find("ul#schedule").prepend(response);
