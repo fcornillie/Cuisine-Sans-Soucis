@@ -32,6 +32,8 @@ v load more/history
 v show invited meals
 + when showing someone else's schedule, prevent from modifying, etc.
 + chronology: prevent changing meals in history, etc.
++ invite people: when inviting, set date of Invitation to date of Meal!!
++ status of invitations in history (???)
 
 - quickadd
 v 'loading'
