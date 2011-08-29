@@ -74,6 +74,10 @@ class User(db.Model):
 				return True
 			except ValueError:
 				return False
+	
+	@property
+	def recipe_count(self):
+		return self.recipes.filter('quickadd', False).count()
 
 class Recipe(db.Model):
 	type = db.StringProperty(choices=set(["starter", "main", "dessert"]))
