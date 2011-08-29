@@ -29,12 +29,12 @@ cookery agent
 
 - schedule 
 v load more/history
-+ show invited meals
+v show invited meals
 
 - quickadd
 v 'loading'
 v pick a suggestion
-+ 'type' in results list
+v 'type' in results list
 + query foodtype
 + full text search: http://www.billkatz.com/2009/6/Simple-Full-Text-Search-for-App-Engine
 v multiple per day
