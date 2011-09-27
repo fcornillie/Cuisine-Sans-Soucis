@@ -45,7 +45,9 @@ from models import *
 import helpers
 import datetime
 
-class BaseHandler(webapp.RequestHandler):
+class BaseHandlerPRD(webapp.RequestHandler):
+	""" The base handler for the production environment on Google """
+	
 	@property
 	def current_user(self):
 		"""Returns the logged in Facebook user, or None if unconnected."""
@@ -56,6 +58,22 @@ class BaseHandler(webapp.RequestHandler):
 				self._current_user = User.get_by_key_name(user_id)
 		return self._current_user
 
+class BaseHandler(webapp.RequestHandler):
+	""" The base handler for the development server """
+	
+	@property
+	def current_user(self):
+		self._current_user = None
+		if users.get_current_user() != None:
+			user_qry = User.all().filter("user", users.get_current_user())
+			if user_qry.count() > 0:
+				user = user_qry[0]
+			else:
+				user = User(user=users.get_current_user())
+				user.put()
+			return user
+		else:
+			self.redirect("http://localhost:8080/_ah/login?continue=http%3A//localhost%3A8080/")
 
 class HomeHandler(BaseHandler):
 	def get(self):
