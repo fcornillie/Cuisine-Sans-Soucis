@@ -5,11 +5,11 @@ api_version: 1
 
 handlers:
 - url: /console/static
-  static_dir: console/app/view/static
+  static_dir: lib/console/app/view/static
 
 - url: /console.*
-  script: console/app/console.py
-
+  script: lib/console/app/console.py
+  
 - url: /css
   static_dir: css
 

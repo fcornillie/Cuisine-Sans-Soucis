@@ -3,7 +3,7 @@
 {% block profile_status %}active{% endblock %}
 
 {% block content %}
-{{ user.nickname }}
+{{ current_user.name|escape }} <a href="{{ current_user.profile_url }}">on Facebook</a>
 
 <div id="todo">
 	<h2>Todo list</h2>

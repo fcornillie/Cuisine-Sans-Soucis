@@ -22,7 +22,7 @@
 				<ul id="menu">
 					<li><a href="/schedule"><img src="/img/calendar.png" alt="schedule" class="{% block schedule_status %}{% endblock %}" /></a></li>
 					<li><a href="/recipes"><img src="/img/coffee_cup.png" alt="recipes" class="{% block recipes_status %}{% endblock %}" /></a></li>
-					<li><a href="/profile"><img src="/img/user.png" alt="profile" class="{% block profile_status %}{% endblock %}" /></a></li>
+					<li>{% if current_user %}<a href="/profile"><img src="http://graph.facebook.com/{{ current_user.id }}/picture"/ class="{% block profile_status %}{% endblock %}"></a>&nbsp;<a href="/auth/logout">Log out</a>{% else %}<a href="/auth/login">Log in with Facebook</a>{% endif %}</li>
 				</ul>
 			</div>
 		</div>

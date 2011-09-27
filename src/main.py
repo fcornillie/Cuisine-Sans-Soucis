@@ -18,10 +18,26 @@
 # Author: Frederik Cornillie <frederik.cornillie@gmail.com>
 # Created: May 9th, 2011
 
-import os
+
+FACEBOOK_APP_ID = "238124392903238"
+FACEBOOK_APP_SECRET = "11b592fc9c39e6750288eb9902138aac"
+
+import base64
+import cgi
+import Cookie
+import email.utils
+import hashlib
+import hmac
+import logging
+import os.path
+import time
+import urllib
+import wsgiref.handlers
+
+from google.appengine.ext import db
 from google.appengine.ext import webapp
-from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp import util
+from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import login_required
 from google.appengine.api import users
 from django.utils import simplejson as json
@@ -29,10 +45,104 @@ from models import *
 import helpers
 import datetime
 
-import logging
+class BaseHandler(webapp.RequestHandler):
+	@property
+	def current_user(self):
+		"""Returns the logged in Facebook user, or None if unconnected."""
+		if not hasattr(self, "_current_user"):
+			self._current_user = None
+			user_id = parse_cookie(self.request.cookies.get("fb_user"))
+			if user_id:
+				self._current_user = User.get_by_key_name(user_id)
+		return self._current_user
 
-class recipe_list(webapp.RequestHandler):
-	@login_required
+
+class HomeHandler(BaseHandler):
+	def get(self):
+		path = os.path.join(os.path.dirname(__file__), "oauth.html")
+		args = dict(current_user=self.current_user)
+		self.response.out.write(template.render(path, args))
+
+class LoginHandler(BaseHandler):
+	def get(self):
+		verification_code = self.request.get("code")
+		args = dict(client_id=FACEBOOK_APP_ID, redirect_uri=self.request.path_url)
+		if self.request.get("code"):
+			args["client_secret"] = FACEBOOK_APP_SECRET
+			args["code"] = self.request.get("code")
+			response = cgi.parse_qs(urllib.urlopen(
+				"https://graph.facebook.com/oauth/access_token?" +
+				urllib.urlencode(args)).read())
+			access_token = response["access_token"][-1]
+
+			# Download the user profile and cache a local instance of the
+			# basic profile info
+			profile = json.load(urllib.urlopen(
+				"https://graph.facebook.com/me?" +
+				urllib.urlencode(dict(access_token=access_token))))
+			user = User(key_name=str(profile["id"]), id=str(profile["id"]),
+						name=profile["name"], access_token=access_token,
+						profile_url=profile["link"])
+			user.put()
+			set_cookie(self.response, "fb_user", str(profile["id"]),
+					expires=time.time() + 30 * 86400)
+			self.redirect("/")
+		else:
+			self.redirect(
+				"https://graph.facebook.com/oauth/authorize?" +
+				urllib.urlencode(args))
+
+
+class LogoutHandler(BaseHandler):
+	def get(self):
+		set_cookie(self.response, "fb_user", "", expires=time.time() - 86400)
+		self.redirect("/")
+
+
+def set_cookie(response, name, value, domain=None, path="/", expires=None):
+	"""Generates and signs a cookie for the give name/value"""
+	timestamp = str(int(time.time()))
+	value = base64.b64encode(value)
+	signature = cookie_signature(value, timestamp)
+	cookie = Cookie.BaseCookie()
+	cookie[name] = "|".join([value, timestamp, signature])
+	cookie[name]["path"] = path
+	if domain: cookie[name]["domain"] = domain
+	if expires:
+		cookie[name]["expires"] = email.utils.formatdate(
+			expires, localtime=False, usegmt=True)
+	response.headers._headers.append(("Set-Cookie", cookie.output()[12:]))
+
+
+def parse_cookie(value):
+	"""Parses and verifies a cookie value from set_cookie"""
+	if not value: return None
+	parts = value.split("|")
+	if len(parts) != 3: return None
+	if cookie_signature(parts[0], parts[1]) != parts[2]:
+		logging.warning("Invalid cookie signature %r", value)
+		return None
+	timestamp = int(parts[1])
+	if timestamp < time.time() - 30 * 86400:
+		logging.warning("Expired cookie %r", value)
+		return None
+	try:
+		return base64.b64decode(parts[0]).strip()
+	except:
+		return None
+
+
+def cookie_signature(*parts):
+	"""Generates a cookie signature.
+
+	We use the Facebook app secret since it is different for every app (so
+	people using this example don't accidentally all use the same secret).
+	"""
+	hash = hmac.new(FACEBOOK_APP_SECRET, digestmod=hashlib.sha1)
+	for part in parts: hash.update(part)
+	return hash.hexdigest()
+	
+class recipe_list(BaseHandler):
 	def get(self):
 		query = {}
 		foodtype = None
@@ -56,16 +166,16 @@ class recipe_list(webapp.RequestHandler):
 		recipes_query = recipes_query.fetch(50)
 		
 		template_values = {
+			'current_user':self.current_user,
 			'foodtypes':FoodType.all(),
 			'query':query,
 			'recipes':recipes_query,
 		}
 		
 		path = os.path.join(os.path.dirname(__file__), 'templates/recipe_list.html')
-		self.response.out.write(template.render(path, helpers.append_base_template_values(template_values)))
+		self.response.out.write(template.render(path, template_values))
 
-class recipe_detail(webapp.RequestHandler):
-	@login_required
+class recipe_detail(BaseHandler):
 	def get(self):
 		if self.request.get('key'):
 			recipe = Recipe.get(self.request.get('key'))
@@ -73,14 +183,15 @@ class recipe_detail(webapp.RequestHandler):
 			recipe = None
 			
 		template_values = {
+			'current_user':self.current_user,
 			'recipe':recipe,
 		}
 		
 		path = os.path.join(os.path.dirname(__file__), 'templates/recipe_detail.html')
-		self.response.out.write(template.render(path, helpers.append_base_template_values(template_values)))
+		self.response.out.write(template.render(path, template_values))
 	
 	def post(self):
-		user = users.get_current_user()
+		user = self.current_user
 		if user:
 			recipe = Recipe()
 			recipe.name = self.request.get("name")
@@ -89,16 +200,16 @@ class recipe_detail(webapp.RequestHandler):
 			recipe.method = self.request.get("method")
 			recipe.preparation_time = int(self.request.get("preparation_time"))
 			recipe.cooking_time = int(self.request.get("cooking_time"))
-			recipe.author = helpers.get_current_user()
+			recipe.author = self.current_user
 			if self.request.get("img"):
 				img_data = self.request.get("img")
 				recipe.image = db.Blob(img_data)
 			recipe.put()
 			self.redirect("/")
 
-class recipe_edit(webapp.RequestHandler):
+class recipe_edit(BaseHandler):
 	def post(self):
-		user = users.get_current_user()
+		user = self.current_user
 		if user:
 			recipe = Recipe.get(self.request.get("key"))
 			property = self.request.get("id")
@@ -111,9 +222,9 @@ class recipe_edit(webapp.RequestHandler):
 			recipe.put()
 			self.response.out.write(newvalue)
 			
-class recipe_jsonquery(webapp.RequestHandler):
+class recipe_jsonquery(BaseHandler):
 	def post(self):
-		user = users.get_current_user()
+		user = self.current_user
 		if user:
 			recipes = []
 			for r in Recipe.all():
@@ -122,8 +233,7 @@ class recipe_jsonquery(webapp.RequestHandler):
 			result = {'recipes':recipes}
 			self.response.out.write(json.dumps(result))
 
-class schedule(webapp.RequestHandler):
-	@login_required
+class schedule(BaseHandler):
 	def get(self):
 		format = self.request.get('format').lower()
 		schedule = []
@@ -131,7 +241,7 @@ class schedule(webapp.RequestHandler):
 		if self.request.get("user"):
 			user = User.get(self.request.get("user"))
 		else:
-			user = helpers.get_current_user()
+			user = self.current_user
 		
 		if self.request.get('start_date'):
 			dateparts = [int(i) for i in self.request.get("start_date").split("-")]
@@ -161,21 +271,23 @@ class schedule(webapp.RequestHandler):
 			
 		if format == 'partial':
 			template_values = {
+				'current_user':self.current_user,
 				'schedule':schedule,
 			}
 			path = os.path.join(os.path.dirname(__file__), 'templates/schedule_days.html')
 			self.response.out.write(template.render(path, template_values))
 		else:
 			template_values = {
+				'current_user':self.current_user,
 				'user':user,
 				'schedule':schedule,
 			}
 			path = os.path.join(os.path.dirname(__file__), 'templates/schedule.html')
-			self.response.out.write(template.render(path, helpers.append_base_template_values(template_values)))
+			self.response.out.write(template.render(path, template_values))
 
-class schedule_modify(webapp.RequestHandler):
+class schedule_modify(BaseHandler):
 	def post(self):
-		user = users.get_current_user()
+		user = self.current_user
 		if user:
 			dateparts = [int(i) for i in self.request.get("date").split("-")]
 			date = datetime.datetime(dateparts[0], dateparts[1], dateparts[2])
@@ -185,12 +297,12 @@ class schedule_modify(webapp.RequestHandler):
 			else:
 				# check whether current user already has a recipe by that name
 				if self.request.get("recipe_name"):
-					recipe_query = Recipe.gql("WHERE author = :1 AND name = :2", helpers.get_current_user(), self.request.get("recipe_name"))
+					recipe_query = Recipe.gql("WHERE author = :1 AND name = :2", self.current_user, self.request.get("recipe_name"))
 					if recipe_query.count() > 0:
 						recipe = recipe_query[0]
 					else:
 						# quickadding a new recipe
-						recipe = Recipe(name=self.request.get("recipe_name"), author=helpers.get_current_user(), quickadd=True)
+						recipe = Recipe(name=self.request.get("recipe_name"), author=self.current_user, quickadd=True)
 						recipe.put()
 				else:
 					recipe = None
@@ -198,7 +310,7 @@ class schedule_modify(webapp.RequestHandler):
 					
 			# first check whether recipe is already scheduled for that day
 			if recipe:
-				meal_query = Meal.gql("WHERE user = :1 AND date = :2 AND recipe = :3", helpers.get_current_user(), date, recipe)
+				meal_query = Meal.gql("WHERE user = :1 AND date = :2 AND recipe = :3", self.current_user, date, recipe)
 			else:
 				meal_query = None
 			
@@ -208,7 +320,7 @@ class schedule_modify(webapp.RequestHandler):
 					if meal_query.count() > 0:
 						result = {'result':'ADD_ERROR'}
 					else:
-						meal = Meal(date=date, recipe=recipe, user=helpers.get_current_user())
+						meal = Meal(date=date, recipe=recipe, user=self.current_user)
 						meal.put()
 						result = {
 							'result':'ADD_OK',
@@ -235,14 +347,13 @@ class schedule_modify(webapp.RequestHandler):
 			
 			self.response.out.write(json.dumps(result))
 
-class profile_detail(webapp.RequestHandler):
-	@login_required
+class profile_detail(BaseHandler):
 	def get(self):
 		
 		if self.request.get("user"):
 			user = User.get(self.request.get("user"))
 		else:
-			user = helpers.get_current_user()
+			user = self.current_user
 		
 		todo = []
 		
@@ -255,20 +366,24 @@ class profile_detail(webapp.RequestHandler):
 		todo.extend(meals_to_be_rated)
 		
 		template_values = {
+			'current_user':self.current_user,
 			'user':user,
 			'foodtypes':FoodType.all(),
 			'todo':todo,
 		}
 		
 		path = os.path.join(os.path.dirname(__file__), 'templates/profile_detail.html')
-		self.response.out.write(template.render(path, helpers.append_base_template_values(template_values)))
+		self.response.out.write(template.render(path, template_values))
 
-class about(webapp.RequestHandler):
+class about(BaseHandler):
 	def get(self):
+		template_values = {
+			'current_user':self.current_user,
+		}
 		path = os.path.join(os.path.dirname(__file__), 'templates/about.html')
-		self.response.out.write(template.render(path, helpers.append_base_template_values()))
+		self.response.out.write(template.render(path, template_values))
 	
-class get_image(webapp.RequestHandler):
+class get_image(BaseHandler):
 	""" Gets the image data for a certain object.
 	Requires:
 	+ object_key: the key of a certain object
@@ -282,8 +397,7 @@ class get_image(webapp.RequestHandler):
 		self.response.headers['Content-Type'] = 'image/jpeg'
 		self.response.out.write(image_data)
 
-class import_content(webapp.RequestHandler):
-	@login_required
+class import_content(BaseHandler):
 	def get(self):
 		from content import recipes
 		for r in recipes:
@@ -307,9 +421,12 @@ class import_content(webapp.RequestHandler):
 				recipe.foodtypes_list.append(ft.key())
 			recipe.put()
 		self.response.out.write("OK")
-			
+
 def main():
 	application = webapp.WSGIApplication([
+		(r"/home", HomeHandler),
+		(r"/auth/login", LoginHandler),
+		(r"/auth/logout", LogoutHandler),
 		('/', schedule),
 		('/recipes', recipe_list),
 		('/recipe', recipe_detail),
