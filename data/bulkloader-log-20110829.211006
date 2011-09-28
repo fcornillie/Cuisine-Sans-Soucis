@@ -1,0 +1,112 @@
+[INFO     2011-08-29 21:10:06,187 bulkloader.py] Logging to bulkloader-log-20110829.211006
+[INFO     2011-08-29 21:10:06,187 bulkloader.py] Throttling transfers:
+[INFO     2011-08-29 21:10:06,187 bulkloader.py] Bandwidth: 250000 bytes/second
+[INFO     2011-08-29 21:10:06,187 bulkloader.py] HTTP connections: 8/second
+[INFO     2011-08-29 21:10:06,187 bulkloader.py] Entities inserted/fetched/modified: 20/second
+[INFO     2011-08-29 21:10:06,187 bulkloader.py] Batch Size: 10
+[INFO     2011-08-29 21:10:06,187 bulkloader.py] Opening database: bulkloader-progress-20110829.211006.sql3
+[INFO     2011-08-29 21:10:06,233 bulkloader.py] Opening database: bulkloader-results-20110829.211006.sql3
+[DEBUG    2011-08-29 21:10:06,280 adaptive_thread_pool.py] [WorkerThread-0] WorkerThread: started
+[DEBUG    2011-08-29 21:10:06,280 adaptive_thread_pool.py] [WorkerThread-1] WorkerThread: started
+[DEBUG    2011-08-29 21:10:06,280 adaptive_thread_pool.py] [WorkerThread-2] WorkerThread: started
+[DEBUG    2011-08-29 21:10:06,280 adaptive_thread_pool.py] [WorkerThread-3] WorkerThread: started
+[DEBUG    2011-08-29 21:10:06,280 adaptive_thread_pool.py] [WorkerThread-4] WorkerThread: started
+[DEBUG    2011-08-29 21:10:06,280 adaptive_thread_pool.py] [WorkerThread-5] WorkerThread: started
+[DEBUG    2011-08-29 21:10:06,280 adaptive_thread_pool.py] [WorkerThread-6] WorkerThread: started
+[DEBUG    2011-08-29 21:10:06,296 adaptive_thread_pool.py] [WorkerThread-7] WorkerThread: started
+[DEBUG    2011-08-29 21:10:06,296 adaptive_thread_pool.py] [WorkerThread-8] WorkerThread: started
+[DEBUG    2011-08-29 21:10:06,296 bulkloader.py] Configuring remote_api. url_path = /_ah/remote_api, servername = cuisinesanssoucis.appspot.com
+[DEBUG    2011-08-29 21:10:06,296 bulkloader.py] Bulkloader using app_id: cuisinesanssoucis
+[INFO     2011-08-29 21:10:06,296 bulkloader.py] Connecting to cuisinesanssoucis.appspot.com/_ah/remote_api
+[DEBUG    2011-08-29 21:10:06,296 adaptive_thread_pool.py] [WorkerThread-9] WorkerThread: started
+[DEBUG    2011-08-29 21:10:28,983 bulkloader.py] [Thread-11] ExportProgressThread: started
+[DEBUG    2011-08-29 21:10:28,983 bulkloader.py] [Thread-12] DataSourceThread: started
+[INFO     2011-08-29 21:10:28,983 bulkloader.py] Downloading kinds: [u'Guest', u'FoodType', u'Recipe', u'User', u'Meal', u'AppEngineConsole']
+[DEBUG    2011-08-29 21:10:29,030 bulkloader.py] [Thread-12] DataSourceThread: exiting
+[DEBUG    2011-08-29 21:10:29,046 adaptive_thread_pool.py] [WorkerThread-1] Got work item Guest-ASC[None to None]
+[DEBUG    2011-08-29 21:10:29,062 bulkloader.py] Waiting for worker threads to finish...
+[DEBUG    2011-08-29 21:10:29,405 bulkloader.py] bulkloader-results-20110829.211006.sql3 insert: delta=0.000
+[DEBUG    2011-08-29 21:10:29,405 bulkloader.py] Entities transferred total: 1
+[DEBUG    2011-08-29 21:10:29,421 bulkloader.py] delete: delta=0.000
+[DEBUG    2011-08-29 21:10:29,421 bulkloader.py] [WorkerThread-1] Guest-ASC[None to None] Transferred 1 entities in 0.3 seconds
+[DEBUG    2011-08-29 21:10:29,421 adaptive_thread_pool.py] Increasing active thread count to 2
+[DEBUG    2011-08-29 21:10:29,421 adaptive_thread_pool.py] [WorkerThread-1] Got work item FoodType-ASC[None to None]
+[DEBUG    2011-08-29 21:10:29,421 adaptive_thread_pool.py] [WorkerThread-4] Got work item Recipe-ASC[None to None]
+[DEBUG    2011-08-29 21:10:29,608 bulkloader.py] bulkloader-results-20110829.211006.sql3 insert: delta=0.000
+[DEBUG    2011-08-29 21:10:29,608 bulkloader.py] Entities transferred total: 5
+[DEBUG    2011-08-29 21:10:29,625 bulkloader.py] delete: delta=0.000
+[DEBUG    2011-08-29 21:10:29,625 bulkloader.py] [WorkerThread-1] FoodType-ASC[None to None] Transferred 4 entities in 0.2 seconds
+[DEBUG    2011-08-29 21:10:29,625 adaptive_thread_pool.py] Increasing active thread count to 3
+[DEBUG    2011-08-29 21:10:29,625 adaptive_thread_pool.py] [WorkerThread-1] Got work item User-ASC[None to None]
+[DEBUG    2011-08-29 21:10:29,625 adaptive_thread_pool.py] [WorkerThread-6] Got work item Meal-ASC[None to None]
+[DEBUG    2011-08-29 21:10:29,828 bulkloader.py] bulkloader-results-20110829.211006.sql3 insert: delta=0.016
+[DEBUG    2011-08-29 21:10:29,828 bulkloader.py] Entities transferred total: 8
+[DEBUG    2011-08-29 21:10:29,828 bulkloader.py] delete: delta=0.000
+[DEBUG    2011-08-29 21:10:29,828 bulkloader.py] [WorkerThread-1] User-ASC[None to None] Transferred 3 entities in 0.2 seconds
+[DEBUG    2011-08-29 21:10:29,842 adaptive_thread_pool.py] Increasing active thread count to 4
+[DEBUG    2011-08-29 21:10:29,842 adaptive_thread_pool.py] [WorkerThread-8] Got work item AppEngineConsole-ASC[None to None]
+[DEBUG    2011-08-29 21:10:30,500 bulkloader.py] bulkloader-results-20110829.211006.sql3 insert: delta=0.016
+[DEBUG    2011-08-29 21:10:30,500 bulkloader.py] Entities transferred total: 18
+[DEBUG    2011-08-29 21:10:30,515 bulkloader.py] delete: delta=0.000
+[DEBUG    2011-08-29 21:10:30,530 bulkloader.py] [WorkerThread-4] Recipe-ASC[None to None] Transferred 10 entities in 1.0 seconds
+[DEBUG    2011-08-29 21:10:30,530 adaptive_thread_pool.py] Increasing active thread count to 5
+[DEBUG    2011-08-29 21:10:30,530 adaptive_thread_pool.py] [WorkerThread-4] Got work item Recipe-DESC(datastore_types.Key.from_path(u'Recipe', 39001L, _app=u'cuisinesanssoucis') to None]
+[DEBUG    2011-08-29 21:10:30,625 bulkloader.py] bulkloader-results-20110829.211006.sql3 insert: delta=0.016
+[DEBUG    2011-08-29 21:10:30,625 bulkloader.py] Entities transferred total: 28
+[DEBUG    2011-08-29 21:10:30,625 bulkloader.py] delete: delta=0.000
+[DEBUG    2011-08-29 21:10:30,640 bulkloader.py] [WorkerThread-6] Meal-ASC[None to None] Transferred 10 entities in 1.0 seconds
+[DEBUG    2011-08-29 21:10:30,640 adaptive_thread_pool.py] Increasing active thread count to 6
+[DEBUG    2011-08-29 21:10:30,640 adaptive_thread_pool.py] [WorkerThread-6] Got work item Meal-DESC(datastore_types.Key.from_path(u'Meal', 40001L, _app=u'cuisinesanssoucis') to None]
+[INFO     2011-08-29 21:10:30,733 bulkloader.py] Recipe: No descending index on __key__, performing serial download
+[DEBUG    2011-08-29 21:10:31,328 bulkloader.py] bulkloader-results-20110829.211006.sql3 insert: delta=0.016
+[DEBUG    2011-08-29 21:10:31,328 bulkloader.py] Entities transferred total: 32
+[DEBUG    2011-08-29 21:10:31,328 bulkloader.py] delete: delta=0.000
+[DEBUG    2011-08-29 21:10:31,328 bulkloader.py] [WorkerThread-4] Recipe-ASC(datastore_types.Key.from_path(u'Recipe', 39001L, _app=u'cuisinesanssoucis') to None] Transferred 4 entities in 0.8 seconds
+[DEBUG    2011-08-29 21:10:31,328 adaptive_thread_pool.py] Increasing active thread count to 7
+[DEBUG    2011-08-29 21:10:31,921 bulkloader.py] bulkloader-results-20110829.211006.sql3 insert: delta=0.015
+[DEBUG    2011-08-29 21:10:31,937 bulkloader.py] Entities transferred total: 42
+[DEBUG    2011-08-29 21:10:31,937 bulkloader.py] delete: delta=0.000
+[DEBUG    2011-08-29 21:10:31,953 bulkloader.py] [WorkerThread-8] AppEngineConsole-ASC[None to None] Transferred 10 entities in 2.0 seconds
+[DEBUG    2011-08-29 21:10:31,953 adaptive_thread_pool.py] Increasing active thread count to 8
+[DEBUG    2011-08-29 21:10:31,953 adaptive_thread_pool.py] [WorkerThread-8] Got work item AppEngineConsole-DESC(datastore_types.Key.from_path(u'AppEngineConsole', 14002L, _app=u'cuisinesanssoucis') to None]
+[INFO     2011-08-29 21:10:32,062 bulkloader.py] Meal: No descending index on __key__, performing serial download
+[DEBUG    2011-08-29 21:10:32,250 bulkloader.py] bulkloader-results-20110829.211006.sql3 insert: delta=0.016
+[DEBUG    2011-08-29 21:10:32,250 bulkloader.py] Entities transferred total: 45
+[DEBUG    2011-08-29 21:10:32,250 bulkloader.py] delete: delta=0.000
+[DEBUG    2011-08-29 21:10:32,250 bulkloader.py] [WorkerThread-6] Meal-ASC(datastore_types.Key.from_path(u'Meal', 40001L, _app=u'cuisinesanssoucis') to None] Transferred 3 entities in 1.6 seconds
+[DEBUG    2011-08-29 21:10:32,250 adaptive_thread_pool.py] Increasing active thread count to 9
+[DEBUG    2011-08-29 21:10:32,546 bulkloader.py] bulkloader-results-20110829.211006.sql3 insert: delta=0.015
+[DEBUG    2011-08-29 21:10:32,546 bulkloader.py] Entities transferred total: 55
+[DEBUG    2011-08-29 21:10:32,546 bulkloader.py] delete: delta=0.000
+[DEBUG    2011-08-29 21:10:32,562 bulkloader.py] [WorkerThread-8] AppEngineConsole-ASC(datastore_types.Key.from_path(u'AppEngineConsole', 14002L, _app=u'cuisinesanssoucis') to None] Transferred 10 entities in 0.5 seconds
+[DEBUG    2011-08-29 21:10:32,562 adaptive_thread_pool.py] Increasing active thread count to 10
+[DEBUG    2011-08-29 21:10:32,562 adaptive_thread_pool.py] [WorkerThread-8] Got work item AppEngineConsole-DESC(datastore_types.Key.from_path(u'AppEngineConsole', 33004L, _app=u'cuisinesanssoucis') to None]
+[DEBUG    2011-08-29 21:10:32,842 bulkloader.py] bulkloader-results-20110829.211006.sql3 insert: delta=0.000
+[DEBUG    2011-08-29 21:10:32,842 bulkloader.py] Entities transferred total: 57
+[DEBUG    2011-08-29 21:10:32,858 bulkloader.py] delete: delta=0.016
+[DEBUG    2011-08-29 21:10:32,858 bulkloader.py] [WorkerThread-8] AppEngineConsole-ASC(datastore_types.Key.from_path(u'AppEngineConsole', 33004L, _app=u'cuisinesanssoucis') to None] Transferred 2 entities in 0.3 seconds
+[DEBUG    2011-08-29 21:10:32,890 adaptive_thread_pool.py] Waiting for Anonymous_WorkerThread to exit
+[DEBUG    2011-08-29 21:10:32,905 adaptive_thread_pool.py] [WorkerThread-3] WorkerThread: exiting
+[DEBUG    2011-08-29 21:10:32,905 adaptive_thread_pool.py] [WorkerThread-2] WorkerThread: exiting
+[DEBUG    2011-08-29 21:10:32,921 adaptive_thread_pool.py] [WorkerThread-4] WorkerThread: exiting
+[DEBUG    2011-08-29 21:10:32,921 adaptive_thread_pool.py] [WorkerThread-1] WorkerThread: exiting
+[DEBUG    2011-08-29 21:10:32,921 adaptive_thread_pool.py] [WorkerThread-0] WorkerThread: exiting
+[DEBUG    2011-08-29 21:10:32,921 adaptive_thread_pool.py] Waiting for Anonymous_WorkerThread to exit
+[DEBUG    2011-08-29 21:10:32,921 adaptive_thread_pool.py] Waiting for Anonymous_WorkerThread to exit
+[DEBUG    2011-08-29 21:10:32,921 adaptive_thread_pool.py] Waiting for Anonymous_WorkerThread to exit
+[DEBUG    2011-08-29 21:10:32,921 adaptive_thread_pool.py] Waiting for Anonymous_WorkerThread to exit
+[DEBUG    2011-08-29 21:10:32,921 adaptive_thread_pool.py] Waiting for Anonymous_WorkerThread to exit
+[DEBUG    2011-08-29 21:10:32,921 adaptive_thread_pool.py] [WorkerThread-8] WorkerThread: exiting
+[DEBUG    2011-08-29 21:10:32,937 adaptive_thread_pool.py] [WorkerThread-9] WorkerThread: exiting
+[DEBUG    2011-08-29 21:10:32,937 adaptive_thread_pool.py] [WorkerThread-6] WorkerThread: exiting
+[DEBUG    2011-08-29 21:10:32,937 adaptive_thread_pool.py] [WorkerThread-7] WorkerThread: exiting
+[DEBUG    2011-08-29 21:10:32,937 adaptive_thread_pool.py] [WorkerThread-5] WorkerThread: exiting
+[DEBUG    2011-08-29 21:10:32,937 adaptive_thread_pool.py] Waiting for Anonymous_WorkerThread to exit
+[DEBUG    2011-08-29 21:10:32,937 adaptive_thread_pool.py] Waiting for Anonymous_WorkerThread to exit
+[DEBUG    2011-08-29 21:10:32,937 adaptive_thread_pool.py] Waiting for Anonymous_WorkerThread to exit
+[DEBUG    2011-08-29 21:10:32,937 adaptive_thread_pool.py] Waiting for Anonymous_WorkerThread to exit
+[DEBUG    2011-08-29 21:10:32,937 bulkloader.py] Waiting for progress_thread to terminate...
+[DEBUG    2011-08-29 21:10:32,967 bulkloader.py] [Thread-11] ExportProgressThread: exiting
+[DEBUG    2011-08-29 21:10:32,983 bulkloader.py] ... done.
+[INFO     2011-08-29 21:10:33,000 bulkloader.py] Have 57 entities, 0 previously transferred
+[INFO     2011-08-29 21:10:33,000 bulkloader.py] 57 entities (1157395 bytes) transferred in 26.8 seconds

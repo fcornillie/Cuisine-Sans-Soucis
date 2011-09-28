@@ -1,0 +1,24 @@
+[INFO     2011-08-29 21:14:41,890 bulkloader.py] Logging to bulkloader-log-20110829.211441
+[INFO     2011-08-29 21:14:41,905 bulkloader.py] Throttling transfers:
+[INFO     2011-08-29 21:14:41,905 bulkloader.py] Bandwidth: 250000 bytes/second
+[INFO     2011-08-29 21:14:41,905 bulkloader.py] HTTP connections: 8/second
+[INFO     2011-08-29 21:14:41,905 bulkloader.py] Entities inserted/fetched/modified: 20/second
+[INFO     2011-08-29 21:14:41,905 bulkloader.py] Batch Size: 10
+[INFO     2011-08-29 21:14:41,905 bulkloader.py] Opening database: bulkloader-progress-20110829.211441.sql3
+[DEBUG    2011-08-29 21:14:41,937 bulkloader.py] [Thread-1] RestoreThread: started
+[DEBUG    2011-08-29 21:14:41,953 bulkloader.py] [Thread-1] RestoreThread: exiting
+[DEBUG    2011-08-29 21:14:42,078 bulkloader.py] [Thread-2] RestoreThread: started
+[DEBUG    2011-08-29 21:14:42,092 bulkloader.py] [Thread-2] RestoreThread: exiting
+[DEBUG    2011-08-29 21:14:42,092 adaptive_thread_pool.py] [WorkerThread-0] WorkerThread: started
+[DEBUG    2011-08-29 21:14:42,092 adaptive_thread_pool.py] [WorkerThread-1] WorkerThread: started
+[DEBUG    2011-08-29 21:14:42,092 adaptive_thread_pool.py] [WorkerThread-2] WorkerThread: started
+[DEBUG    2011-08-29 21:14:42,092 adaptive_thread_pool.py] [WorkerThread-3] WorkerThread: started
+[DEBUG    2011-08-29 21:14:42,092 adaptive_thread_pool.py] [WorkerThread-4] WorkerThread: started
+[DEBUG    2011-08-29 21:14:42,092 adaptive_thread_pool.py] [WorkerThread-5] WorkerThread: started
+[DEBUG    2011-08-29 21:14:42,092 adaptive_thread_pool.py] [WorkerThread-6] WorkerThread: started
+[DEBUG    2011-08-29 21:14:42,108 adaptive_thread_pool.py] [WorkerThread-7] WorkerThread: started
+[DEBUG    2011-08-29 21:14:42,108 adaptive_thread_pool.py] [WorkerThread-8] WorkerThread: started
+[DEBUG    2011-08-29 21:14:42,108 bulkloader.py] Configuring remote_api. url_path = /_ah/remote_api, servername = yarbapp.appspot.com
+[DEBUG    2011-08-29 21:14:42,108 bulkloader.py] Bulkloader using app_id: yarbapp
+[INFO     2011-08-29 21:14:42,108 bulkloader.py] Connecting to yarbapp.appspot.com/_ah/remote_api
+[DEBUG    2011-08-29 21:14:42,108 adaptive_thread_pool.py] [WorkerThread-9] WorkerThread: started
