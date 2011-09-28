@@ -50,22 +50,21 @@ body{
 	width:100%;
 	height:32px;
 	float:left;
-	padding:5px 0 5px 0;
+	padding:5px;
 	background-color:#e95c52;
 }
 #main{
-	width:900px;
+	width:700px;
 	margin:auto;
 }
 #content,
 #contentright{
-	margin:5px 0px 5px 0;
+	padding:5px;
 	float:left;
 	display:inline;
 }
 #content{
 	width:700px;
-	padding-right: 5px;
 	word-wrap:break-word;
 	position:relative;
 }
@@ -90,7 +89,7 @@ body{
 .wrap {
 	position:relative;
 	margin:0 auto;
-	width:900px;
+	width:700px;
 }
 .clearfloat {
 clear:both;
@@ -104,7 +103,7 @@ height:0;
 \*------------------------------------*/
 #logo{
 	float:left;
-	width:120px;
+	width:100px;
 }
 div#nav{
 	float:left;
@@ -257,18 +256,30 @@ ul.query_result li a:hover{
 /*--- iPhone only CSS here ---*/
 
 body{
-	padding:5px;
 	width:auto;
 	-webkit-text-size-adjust:none;
 	font-family:Helvetica, Arial, Verdana, sans-serif;
 }
 div{
-	clear:both!important;
+	/*clear:both!important;
 	display:block!important;
 	width:100%!important;
 	float:none!important;
 	margin:0!important;
-	padding:0!important;
+	padding:0!important;*/
+}
+#main{
+	width:100%!important;
+}
+#content{
+	width:100%!important;
+	padding:5px;
+}
+.wrap {
+	width:100%!important;
+}
+div#auth div#text span#username{
+	display:none;
 }
 img{
 	max-width:100%;
@@ -284,4 +295,7 @@ div.recipe_list{
 	text-align:center!important;
 }
 
+}
+#footer{
+	display:none;
 }

@@ -25,16 +25,13 @@
 				</ul>
 			</div>
 			<div id="auth">
-				{% if current_user %}<div id="avatar"><a href="/profile"><img src="http://graph.facebook.com/{{ current_user.id }}/picture"/ class="button" ></div><div id="text"><span id="username">{{ current_user.name|escape }}</span></a><br/><a href="/auth/logout">Log out</a></div>{% else %}<div id="text"><a href="/auth/login">Log in with Facebook</a></div>{% endif %}
+				{% if current_user %}<div id="avatar"><a href="/profile"><img src="http://graph.facebook.com/{{ current_user.id }}/picture"/ class="button" ></a></div><div id="text"><span id="username"><a href="/profile">{{ current_user.name|escape }}</a><br/></span><a href="/auth/logout">Log out</a></div>{% else %}<div id="text"><a href="/auth/login">Log in with Facebook</a></div>{% endif %}
 			</div>
 		</div>
 	</div>
 	<div id="main">
 		<div id="content">
 			{% block content %}{% endblock %}
-		</div>
-		<div id="contentright">
-			{% block profile %}{% include 'profile.html' %}{% endblock %}
 		</div>
 	</div>
 	<div id="footer">
