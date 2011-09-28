@@ -45,7 +45,7 @@ from models import *
 import helpers
 import datetime
 
-class BaseHandlerPRD(webapp.RequestHandler):
+class BaseHandler(webapp.RequestHandler):
 	""" The base handler for the production environment on Google """
 	
 	@property
@@ -58,7 +58,7 @@ class BaseHandlerPRD(webapp.RequestHandler):
 				self._current_user = User.get_by_key_name(user_id)
 		return self._current_user
 
-class BaseHandler(webapp.RequestHandler):
+class BaseHandlerDEV(webapp.RequestHandler):
 	""" The base handler for the development server """
 	
 	@property
@@ -184,6 +184,7 @@ class recipe_list(BaseHandler):
 		recipes_query = recipes_query.fetch(50)
 		
 		template_values = {
+			'page':'recipes',
 			'current_user':self.current_user,
 			'foodtypes':FoodType.all(),
 			'query':query,
@@ -201,6 +202,7 @@ class recipe_detail(BaseHandler):
 			recipe = None
 			
 		template_values = {
+			'page':'recipes',
 			'current_user':self.current_user,
 			'recipe':recipe,
 		}
@@ -289,6 +291,7 @@ class schedule(BaseHandler):
 			
 		if format == 'partial':
 			template_values = {
+				'page':'schedule',
 				'current_user':self.current_user,
 				'schedule':schedule,
 			}
@@ -296,6 +299,7 @@ class schedule(BaseHandler):
 			self.response.out.write(template.render(path, template_values))
 		else:
 			template_values = {
+				'page':'schedule',
 				'current_user':self.current_user,
 				'user':user,
 				'schedule':schedule,
@@ -384,6 +388,7 @@ class profile_detail(BaseHandler):
 		todo.extend(meals_to_be_rated)
 		
 		template_values = {
+			'page':'profile',
 			'current_user':self.current_user,
 			'user':user,
 			'foodtypes':FoodType.all(),

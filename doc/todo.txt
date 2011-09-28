@@ -50,7 +50,8 @@ v multiple per day
 v fix recipe counter
 
 - social stuff
-+ authentication through FB Connect
+V authentication through FB Connect
++ authentication through Google accounts > check whether friends can be queried using API?
 + recipe rating
 + meal rating
 + recommend recipe
@@ -64,3 +65,7 @@ v fix recipe counter
 v iphone home button
 + logo
 + icons
+
+3. artwork
+
+http://mimimashud.com/mimo/2011/04/06/doodle-icon-sets/

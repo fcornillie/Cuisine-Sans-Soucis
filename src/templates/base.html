@@ -16,14 +16,16 @@
 	<div id="header">
 		<div class="wrap">
 			<div id="logo">
-				<a href="/"><img src="/img/logo.png" alt="YARB"/></a><br/>What do you want to eat today?
+				<a href="/about"><img src="/img/yarb.png" alt="YARB"/></a>
 			</div>
 			<div id="nav">
 				<ul id="menu">
-					<li><a href="/schedule"><img src="/img/calendar.png" alt="schedule" class="{% block schedule_status %}{% endblock %}" /></a></li>
-					<li><a href="/recipes"><img src="/img/coffee_cup.png" alt="recipes" class="{% block recipes_status %}{% endblock %}" /></a></li>
-					<li>{% if current_user %}<a href="/profile"><img src="http://graph.facebook.com/{{ current_user.id }}/picture"/ class="{% block profile_status %}{% endblock %}"></a>&nbsp;<a href="/auth/logout">Log out</a>{% else %}<a href="/auth/login">Log in with Facebook</a>{% endif %}</li>
+					<li><a href="/schedule">{% ifequal page 'schedule' %}<img src="/img/calendar_32.png" alt="schedule" class="button" />{% else %}<img src="/img/calendar_nobg_32.png" alt="schedule" class="button" />{% endifequal %}</a></li>
+					<li><a href="/recipes">{% ifequal page 'recipes' %}<img src="/img/recipes_32.png" alt="recipes" class="button" />{% else %}<img src="/img/recipes_nobg_32.png" alt="schedule" class="button" />{% endifequal %}</a></li>
 				</ul>
+			</div>
+			<div id="auth">
+				{% if current_user %}<div id="avatar"><a href="/profile"><img src="http://graph.facebook.com/{{ current_user.id }}/picture"/ class="button" ></div><div id="text"><span id="username">{{ current_user.name|escape }}</span></a><br/><a href="/auth/logout">Log out</a></div>{% else %}<div id="text"><a href="/auth/login">Log in with Facebook</a></div>{% endif %}
 			</div>
 		</div>
 	</div>
@@ -38,7 +40,6 @@
 	<div id="footer">
 		<div class="wrap">
 			(c) 2011 The Cortelli Bruvvas
-			<br/><a href="/about">About</a>
 			<br/>devtools: <a href="/import_content" target="_blank">import content</a> | <a href="/_ah/admin" target="_blank">admin</a> | <a href="/console" target="_blank">console</a> | <a href="http://localhost:8080/_ah/login?continue=http%3A//localhost%3A8080/">auth</a>
 			<br/>docs: <a href="http://code.google.com/appengine/docs/" target="_blank">appengine</a> | <a href="http://docs.jquery.com/Main_Page" target="_blank">jquery</a> | <a href="https://docs.djangoproject.com/en/1.2/ref/templates/builtins/" target="_blank">django</a>
 		</div>
