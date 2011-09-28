@@ -3,7 +3,8 @@
 {% block recipes_status %}active{% endblock %}
 
 {% block content %}
-	
+<h2>Recipe book</h2>
+
 	<a href="/recipe">Add</a> a recipe.<br/>&nbsp;<br/>
 	<div id="recipe_query">Search: <input name="search"/> | {% ifnotequal foodtypes.count 0 %}Show only: {% for ft in foodtypes %}<a href="/recipes?foodtype={{ ft.key }}">{{ ft.name }}</a>&nbsp;{% endfor %}|&nbsp;{% endifnotequal %}<a href="/recipes?user={{ current_user.key }}">Show only my recipes</a>
 	</div>

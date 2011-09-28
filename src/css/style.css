@@ -156,11 +156,12 @@ div#auth div#text a:hover{
 	CONTENT
 \*------------------------------------*/
 h1{
+	margin-bottom:10px;
 	font-size:32px;
 	font-weight:bold;
 }
 h2{
-	margin-top:10px;
+	margin-bottom:10px;
 	font-size:24px;
 	font-weight:bold;
 }
@@ -294,8 +295,8 @@ img.recipe_detail{
 div.recipe_list{
 	text-align:center!important;
 }
-
-}
 #footer{
-	display:none;
+	display:none!important;
+}
+
 }

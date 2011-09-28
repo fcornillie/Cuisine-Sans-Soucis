@@ -3,6 +3,8 @@
 {% block schedule_status %}active{% endblock %}
 
 {% block content %}
+<h2>Schedule</h2>
+
 <button id='back' class='getschedule'>previous</button>
 <ul id="schedule" user="{{ user.key }}">
 	{% include 'schedule_days.html' %}

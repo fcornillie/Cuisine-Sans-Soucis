@@ -45,7 +45,7 @@ from models import *
 import helpers
 import datetime
 
-class BaseHandler(webapp.RequestHandler):
+class BaseHandlerP(webapp.RequestHandler):
 	""" The base handler for the production environment on Google """
 	
 	@property
@@ -58,7 +58,7 @@ class BaseHandler(webapp.RequestHandler):
 				self._current_user = User.get_by_key_name(user_id)
 		return self._current_user
 
-class BaseHandlerDEV(webapp.RequestHandler):
+class BaseHandler(webapp.RequestHandler):
 	""" The base handler for the development server """
 	
 	@property
@@ -294,6 +294,7 @@ class schedule(BaseHandler):
 				'page':'schedule',
 				'current_user':self.current_user,
 				'schedule':schedule,
+				'today':datetime.date.today(),
 			}
 			path = os.path.join(os.path.dirname(__file__), 'templates/schedule_days.html')
 			self.response.out.write(template.render(path, template_values))
@@ -303,6 +304,7 @@ class schedule(BaseHandler):
 				'current_user':self.current_user,
 				'user':user,
 				'schedule':schedule,
+				'today':datetime.date.today(),
 			}
 			path = os.path.join(os.path.dirname(__file__), 'templates/schedule.html')
 			self.response.out.write(template.render(path, template_values))

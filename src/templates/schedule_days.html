@@ -1,6 +1,6 @@
 {% for day in schedule %}
 	<li class="date{% ifequal day.date today %} today{% endifequal %}" key='{{ day.date|date:"Y-n-j" }}'>
-		<div class="date">{{ day.date|naturalday:"l" }}</div>
+		<div class="date">{% if day.date < today %}{{ day.date|date:"j/n" }}{% else %}{{ day.date|naturalday:"l" }}{% endif %}</div>
 		<div class="meal">
 			<div class="add">
 				<img class="add" src="/img/add_16.png"/>

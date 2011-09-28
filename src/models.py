@@ -131,7 +131,7 @@ class Meal(db.Model):
 	
 	date = db.DateTimeProperty()
 	recipe = db.ReferenceProperty(Recipe)
-	user = db.ReferenceProperty(User)
+	user = db.ReferenceProperty(User, collection_name="meals")
 	rating = db.RatingProperty()
 	preparation_time = db.IntegerProperty()
 	cooking_time = db.IntegerProperty()

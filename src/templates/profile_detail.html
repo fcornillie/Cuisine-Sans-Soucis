@@ -3,7 +3,13 @@
 {% block profile_status %}active{% endblock %}
 
 {% block content %}
+<h2>{{ current_user.name|escape }}'s profile</h2>
+
 {{ current_user.name|escape }} <a href="{{ current_user.profile_url }}">on Facebook</a>
+<ul>
+	<li>{{ current_user.recipe_count }} contributed recipes</li>
+	<li>{{ current_user.meals.count }} meals eaten</li>
+</ul>
 
 <div id="todo">
 	<h2>Todo list</h2>
@@ -19,15 +25,6 @@
 	<ul>
 	{% for ft in foodtypes %}
 		<li>{{ ft.name }} yes | no</li>
-	{% endfor %}
-	</ul>
-</div>
-
-<div id="friends">
-	<h2>Friends</h2>
-	<ul>
-	{% for friend in user.friends %}
-		<li><a href="/profile?user={{ friend.key }}">{{ friend.nickname }}</a></li>
 	{% endfor %}
 	</ul>
 </div>
