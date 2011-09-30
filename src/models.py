@@ -18,10 +18,7 @@ class User(db.Model):
 	
 	# old code below
 	user = db.UserProperty()
-	joined_date = db.DateTimeProperty(auto_now_add=True)
-	friends_list = db.ListProperty(db.Key)		# XX ListProperties are limited to 5000 entries
 	_is_admin = db.BooleanProperty(default=False)
-	avatar = db.BlobProperty()
 	
 	@property
 	def is_admin(self):
@@ -34,55 +31,6 @@ class User(db.Model):
 	@property
 	def email(self):
 		return self.user.email()
-		
-	def friends(self, keys_only=False):
-		"""
-		Returns a list containing the friend instances.
-		"""
-		if self.friends_list:
-			if keys_only:
-				return self.friends_list
-			else:
-				return User.get(self.friends_list)
-		else:
-			return []
-	
-	def friend(self, user_key):
-		"""
-		Adds a User to the list of friends. Friending is birectional.
-		
-		Requires the key of the User instance.
-		
-		Returns True if the User has been added to the list. Returns False if the User was already friended.
-		"""
-		if user_key != self.key():		# obviously you cannot friend yourself
-			try:
-				self.friends_list.index(user_key)
-				return False
-			except ValueError:
-				self.friends_list.append(user_key)
-				self.put()
-				user = User.get(user_key)	# friending is birectional
-				user.friends_list.append(self.key())
-				user.put()
-				return True
-	
-	def defriend(self, user_key):
-		"""
-		Removes a User from the list of friends.
-		
-		Requires the key of the User instance.
-		
-		Returns True if the User has been removed from the list. Returns False if the User was not in the list.
-		"""
-		if user_key != self.key():		# obviously you cannot defriend yourself
-			try:
-				self.friends_list.index(user_key)
-				self.friends_list.remove(user_key)
-				self.put()
-				return True
-			except ValueError:
-				return False
 	
 	@property
 	def recipe_count(self):

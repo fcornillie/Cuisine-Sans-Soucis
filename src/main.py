@@ -45,7 +45,7 @@ from models import *
 import helpers
 import datetime
 
-class BaseHandlerP(webapp.RequestHandler):
+class BaseHandlerPRD(webapp.RequestHandler):
 	""" The base handler for the production environment on Google """
 	
 	@property
@@ -71,17 +71,17 @@ class BaseHandler(webapp.RequestHandler):
 			else:
 				user = User(user=users.get_current_user())
 				user.put()
-			return user
-		else:
-			self.redirect("http://localhost:8080/_ah/login?continue=http%3A//localhost%3A8080/")
+			self._current_user = user
+		return self._current_user
 
-class HomeHandler(BaseHandler):
+class RootHandler(BaseHandler):
 	def get(self):
-		path = os.path.join(os.path.dirname(__file__), "oauth.html")
-		args = dict(current_user=self.current_user)
-		self.response.out.write(template.render(path, args))
+		if self.current_user == None:
+			self.redirect("/recipes")
+		else:
+			self.redirect("/schedule")
 
-class LoginHandler(BaseHandler):
+class FBLoginHandler(BaseHandler):
 	def get(self):
 		verification_code = self.request.get("code")
 		args = dict(client_id=FACEBOOK_APP_ID, redirect_uri=self.request.path_url)
@@ -111,7 +111,7 @@ class LoginHandler(BaseHandler):
 				urllib.urlencode(args))
 
 
-class LogoutHandler(BaseHandler):
+class FBLogoutHandler(BaseHandler):
 	def get(self):
 		set_cookie(self.response, "fb_user", "", expires=time.time() - 86400)
 		self.redirect("/")
@@ -192,7 +192,7 @@ class recipe_list(BaseHandler):
 		}
 		
 		path = os.path.join(os.path.dirname(__file__), 'templates/recipe_list.html')
-		self.response.out.write(template.render(path, template_values))
+		self.response.out.write(template.render(path, helpers.append_base_template_values(template_values)))
 
 class recipe_detail(BaseHandler):
 	def get(self):
@@ -208,7 +208,7 @@ class recipe_detail(BaseHandler):
 		}
 		
 		path = os.path.join(os.path.dirname(__file__), 'templates/recipe_detail.html')
-		self.response.out.write(template.render(path, template_values))
+		self.response.out.write(template.render(path, helpers.append_base_template_values(template_values)))
 	
 	def post(self):
 		user = self.current_user
@@ -241,7 +241,7 @@ class recipe_edit(BaseHandler):
 				recipe.__setattr__(property, unicode(newvalue))
 			recipe.put()
 			self.response.out.write(newvalue)
-			
+
 class recipe_jsonquery(BaseHandler):
 	def post(self):
 		user = self.current_user
@@ -255,59 +255,62 @@ class recipe_jsonquery(BaseHandler):
 
 class schedule(BaseHandler):
 	def get(self):
-		format = self.request.get('format').lower()
-		schedule = []
+		if not self.current_user:
+			self.redirect("/login")
+		else:
+			format = self.request.get('format').lower()
+			schedule = []
 
-		if self.request.get("user"):
-			user = User.get(self.request.get("user"))
-		else:
-			user = self.current_user
-		
-		if self.request.get('start_date'):
-			dateparts = [int(i) for i in self.request.get("start_date").split("-")]
-			start_date = datetime.date(dateparts[0], dateparts[1], dateparts[2])
-		else:
-			start_date = datetime.date.today()
-		if self.request.get('nof_days'):
-			nof_days = self.request.get('nof_days')
-		else:
-			from settings import SCHEDULE_DEFAULT_NUMBER_OF_DAYS
-			nof_days = SCHEDULE_DEFAULT_NUMBER_OF_DAYS
-		if self.request.get('direction')=='back':
-			start_date -= datetime.timedelta(nof_days)
-		if self.request.get('direction')=='forward':
-			start_date += datetime.timedelta(1)
-		
-		for i in range(nof_days):
-			date_next = start_date+datetime.timedelta(i)
-			meal_query = Meal.gql("WHERE user = :1 AND date = :2", user, date_next)
-			invitations_query = Invitation.gql("WHERE guest = :1 AND date = :2", user, date_next)
-			date = {
-				'date':date_next,
-				'meals':meal_query,
-				'invitations':invitations_query,
-			}
-			schedule.append(date)
+			if self.request.get("user"):
+				user = User.get(self.request.get("user"))
+			else:
+				user = self.current_user
 			
-		if format == 'partial':
-			template_values = {
-				'page':'schedule',
-				'current_user':self.current_user,
-				'schedule':schedule,
-				'today':datetime.date.today(),
-			}
-			path = os.path.join(os.path.dirname(__file__), 'templates/schedule_days.html')
-			self.response.out.write(template.render(path, template_values))
-		else:
-			template_values = {
-				'page':'schedule',
-				'current_user':self.current_user,
-				'user':user,
-				'schedule':schedule,
-				'today':datetime.date.today(),
-			}
-			path = os.path.join(os.path.dirname(__file__), 'templates/schedule.html')
-			self.response.out.write(template.render(path, template_values))
+			if self.request.get('start_date'):
+				dateparts = [int(i) for i in self.request.get("start_date").split("-")]
+				start_date = datetime.date(dateparts[0], dateparts[1], dateparts[2])
+			else:
+				start_date = datetime.date.today()
+			if self.request.get('nof_days'):
+				nof_days = self.request.get('nof_days')
+			else:
+				from settings import SCHEDULE_DEFAULT_NUMBER_OF_DAYS
+				nof_days = SCHEDULE_DEFAULT_NUMBER_OF_DAYS
+			if self.request.get('direction')=='back':
+				start_date -= datetime.timedelta(nof_days)
+			if self.request.get('direction')=='forward':
+				start_date += datetime.timedelta(1)
+			
+			for i in range(nof_days):
+				date_next = start_date+datetime.timedelta(i)
+				meal_query = Meal.gql("WHERE user = :1 AND date = :2", user, date_next)
+				invitations_query = Invitation.gql("WHERE guest = :1 AND date = :2", user, date_next)
+				date = {
+					'date':date_next,
+					'meals':meal_query,
+					'invitations':invitations_query,
+				}
+				schedule.append(date)
+				
+			if format == 'partial':
+				template_values = {
+					'page':'schedule',
+					'current_user':self.current_user,
+					'schedule':schedule,
+					'today':datetime.date.today(),
+				}
+				path = os.path.join(os.path.dirname(__file__), 'templates/schedule_days.html')
+				self.response.out.write(template.render(path, helpers.append_base_template_values(template_values)))
+			else:
+				template_values = {
+					'page':'schedule',
+					'current_user':self.current_user,
+					'user':user,
+					'schedule':schedule,
+					'today':datetime.date.today(),
+				}
+				path = os.path.join(os.path.dirname(__file__), 'templates/schedule.html')
+				self.response.out.write(template.render(path, helpers.append_base_template_values(template_values)))
 
 class schedule_modify(BaseHandler):
 	def post(self):
@@ -398,7 +401,7 @@ class profile_detail(BaseHandler):
 		}
 		
 		path = os.path.join(os.path.dirname(__file__), 'templates/profile_detail.html')
-		self.response.out.write(template.render(path, template_values))
+		self.response.out.write(template.render(path, helpers.append_base_template_values(template_values)))
 
 class about(BaseHandler):
 	def get(self):
@@ -406,7 +409,7 @@ class about(BaseHandler):
 			'current_user':self.current_user,
 		}
 		path = os.path.join(os.path.dirname(__file__), 'templates/about.html')
-		self.response.out.write(template.render(path, template_values))
+		self.response.out.write(template.render(path, helpers.append_base_template_values(template_values)))
 	
 class get_image(BaseHandler):
 	""" Gets the image data for a certain object.
@@ -414,8 +417,7 @@ class get_image(BaseHandler):
 	+ object_key: the key of a certain object
 	+ image_property: the name of the Blob property.
 	"""
-
-	@login_required
+	
 	def get(self):
 		object = db.Model.get(self.request.get('object_key'))
 		image_data = object.image
@@ -449,10 +451,9 @@ class import_content(BaseHandler):
 
 def main():
 	application = webapp.WSGIApplication([
-		(r"/home", HomeHandler),
-		(r"/auth/login", LoginHandler),
-		(r"/auth/logout", LogoutHandler),
-		('/', schedule),
+		(r'/auth/facebook/login', FBLoginHandler),
+		(r'/auth/facebook/logout', FBLogoutHandler),
+		('/', RootHandler),
 		('/recipes', recipe_list),
 		('/recipe', recipe_detail),
 		('/recipe/edit', recipe_edit),

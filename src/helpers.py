@@ -10,7 +10,7 @@ from models import *
 # **********
 # HELPER FUNCTIONS
 # **********
-
+  
 def get_current_user():
 	user_query = User.gql("WHERE user = :1", users.get_current_user())
 	if user_query.count() > 0:
@@ -36,5 +36,7 @@ def append_base_template_values(template_values={}):
 	#template_values['is_current_user_admin'] = users.is_current_user_admin()
 	import datetime
 	template_values['today'] = datetime.date.today()
+	template_values['google_logout_url'] = users.create_logout_url("/")
+	template_values['google_login_url'] = users.create_login_url("/")
 	
 	return template_values

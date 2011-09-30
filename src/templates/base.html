@@ -20,12 +20,12 @@
 			</div>
 			<div id="nav">
 				<ul id="menu">
-					<li><a href="/schedule">{% ifequal page 'schedule' %}<img src="/img/calendar_32.png" alt="schedule" class="button" />{% else %}<img src="/img/calendar_nobg_32.png" alt="schedule" class="button" />{% endifequal %}</a></li>
 					<li><a href="/recipes">{% ifequal page 'recipes' %}<img src="/img/recipes_32.png" alt="recipes" class="button" />{% else %}<img src="/img/recipes_nobg_32.png" alt="schedule" class="button" />{% endifequal %}</a></li>
+					<li><a href="/schedule">{% ifequal page 'schedule' %}<img src="/img/calendar_32.png" alt="schedule" class="button" />{% else %}<img src="/img/calendar_nobg_32.png" alt="schedule" class="button" />{% endifequal %}</a></li>
 				</ul>
 			</div>
 			<div id="auth">
-				{% if current_user %}<div id="avatar"><a href="/profile"><img src="http://graph.facebook.com/{{ current_user.id }}/picture"/ class="button" ></a></div><div id="text"><span id="username"><a href="/profile">{{ current_user.name|escape }}</a><br/></span><a href="/auth/logout">Log out</a></div>{% else %}<div id="text"><a href="/auth/login">Log in with Facebook</a></div>{% endif %}
+				{% if current_user %}<div id="avatar"><a href="/profile"><img src="http://graph.facebook.com/{{ current_user.id }}/picture"/ class="button" ></a></div><div id="text"><span id="username"><a href="/profile">{{ current_user.name|escape }}</a><br/></span><a href="/auth/facebook/logout">Log out</a></div>{% else %}<div id="text"><a href="/auth/facebook/login">Log in with Facebook</a></div>{% endif %}
 			</div>
 		</div>
 	</div>
