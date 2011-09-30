@@ -39,39 +39,35 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import login_required
+#from helpers import login_required
 from google.appengine.api import users
 from django.utils import simplejson as json
 from models import *
 import helpers
 import datetime
 
-class BaseHandlerPRD(webapp.RequestHandler):
+class BaseHandler(webapp.RequestHandler):
 	""" The base handler for the production environment on Google """
 	
 	@property
 	def current_user(self):
-		"""Returns the logged in Facebook user, or None if unconnected."""
+		"""Returns the logged in user (Facebook first, then Google), or None if unconnected."""
 		if not hasattr(self, "_current_user"):
 			self._current_user = None
+			# Facebook
 			user_id = parse_cookie(self.request.cookies.get("fb_user"))
 			if user_id:
 				self._current_user = User.get_by_key_name(user_id)
-		return self._current_user
-
-class BaseHandler(webapp.RequestHandler):
-	""" The base handler for the development server """
-	
-	@property
-	def current_user(self):
-		self._current_user = None
-		if users.get_current_user() != None:
-			user_qry = User.all().filter("user", users.get_current_user())
-			if user_qry.count() > 0:
-				user = user_qry[0]
+			# Google
 			else:
-				user = User(user=users.get_current_user())
-				user.put()
-			self._current_user = user
+				if users.get_current_user() != None:
+					user_qry = User.all().filter("user", users.get_current_user())
+					if user_qry.count() > 0:
+						user = user_qry[0]
+					else:
+						user = User(user=users.get_current_user())
+						user.put()
+					self._current_user = user
 		return self._current_user
 
 class RootHandler(BaseHandler):
@@ -256,7 +252,7 @@ class recipe_jsonquery(BaseHandler):
 class schedule(BaseHandler):
 	def get(self):
 		if not self.current_user:
-			self.redirect("/login")
+			self.redirect("/auth/facebook/login")
 		else:
 			format = self.request.get('format').lower()
 			schedule = []
