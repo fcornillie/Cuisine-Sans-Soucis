@@ -11,6 +11,7 @@
 	<li>{{ current_user.meals.count }} meals eaten</li>
 </ul>
 
+{% if todo|length %}
 <div id="todo">
 	<h2>Todo list</h2>
 	<ul id="todo">
@@ -19,14 +20,46 @@
 		{% endfor %}
 	</ul>
 </div>
+{% endif %}
 
-<div id="likes">
-	<h2>Likes</h2>
-	<ul>
-	{% for ft in foodtypes %}
-		<li>{{ ft.name }} yes | no</li>
+<div id="preferences">
+	<h2>Preferences</h2>
+	<table id="preferences">
+	<tr class="header">
+		<td class="foodtype">kind of food</td>
+		<td class="like">like</td>
+		<td class="allergic">allergic</td>
+		{% for d in weekdays %}
+		<td class="weekday">{{ d|slice:":3" }}</td>
+		{% endfor %}
+	</tr>
+	{% for p in current_user.preferences %}
+		<tr class="data">
+		<td class="foodtype" key="{{ p.foodtype.key }}">{{ p.foodtype.name }}</td>
+		<td class="like"><input name="like" type="checkbox" {% if p.like %}checked="checked"{% endif %} /></td>
+		<td class="allergic"><input name="allergic" type="checkbox" {% if p.allergic %}checked="checked"{% endif %} /></td>
+		{% for d in weekdays %}
+		<td class="weekday"><input name="day{{ forloop.counter0 }}" type="checkbox" {% if forloop.counter0 in p.weekdays %}checked="checked"{% endif %} /></td>
+		{% endfor %}
+		</tr>
 	{% endfor %}
-	</ul>
+	</table>
+<script type="text/javascript">
+$("table#preferences :checkbox").live("click", function() {
+	foodtype = $(this).parent().siblings("td.foodtype").attr("key");
+	name = $(this).attr("name");
+	value = ($(this).attr("checked")=="checked")?1:0;
+	data = "foodtype="+foodtype+"&name="+name+"&value="+value;
+	$.ajax({
+		type: "POST", 
+		url: "/profile/preferences/modify", 
+		data: data,
+		success: function( response ) {
+			json_response = eval('(' + response + ')');
+		}
+	});	
+});
+</script>
 </div>
 
 <br/>&nbsp;<br/>Full user profile here: likes/dislikes, favourite recipes, tracking & logging details (number of recipes cooked, contributed, etc.), friends, etc etc.

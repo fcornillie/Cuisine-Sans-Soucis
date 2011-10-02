@@ -388,16 +388,49 @@ class profile_detail(BaseHandler):
 			
 		todo.extend(meals_to_be_rated)
 		
+		import calendar
+		import locale
+		#locale.setlocale(locale.LC_ALL, 'english_US')
+		#  update day names for new locale
+		WEEKDAYS = [day for day in calendar.day_name] # list of day name strings
+		
 		template_values = {
 			'page':'profile',
 			'current_user':self.current_user,
 			'user':user,
-			'foodtypes':FoodType.all(),
 			'todo':todo,
+			'weekdays':WEEKDAYS,
 		}
 		
 		path = os.path.join(os.path.dirname(__file__), 'templates/profile_detail.html')
 		self.response.out.write(template.render(path, helpers.append_base_template_values(template_values)))
+		
+class profile_modify_preference(BaseHandler):
+	def post(self):
+		user = self.current_user
+		if user:
+			ft = FoodType.get(self.request.get("foodtype"))
+			#pref_qry = user.preferences.filter("foodtype", ft)
+			pref_qry = Preference.gql("WHERE user = :1 AND foodtype = :2", user, ft)
+			if pref_qry.count()>0:
+				pref = pref_qry[0]
+				name = self.request.get("name")
+				if name == "like":
+					pref.like = self.request.get("value")=="1"
+				if name == "allergic":
+					pref.allergic = self.request.get("value")=="1"
+				if name[0:3] == "day":
+					day = int(name[3])
+					if self.request.get("value")=="1":
+						if not day in pref.weekdays:
+							pref.weekdays.append(day)
+					else:
+						if day in pref.weekdays:
+							pref.weekdays.remove(day)
+				pref.put()
+				self.response.out.write(json.dumps("OK"))
+			else:
+				self.response.out.write(json.dumps("ERROR"))
 
 class about(BaseHandler):
 	def get(self):
@@ -457,6 +490,7 @@ def main():
 		('/schedule', schedule),
 		('/schedule/modify', schedule_modify),
 		('/profile', profile_detail),
+		('/profile/preferences/modify', profile_modify_preference),
 		('/about', about),
 		('/get_image', get_image),
 		('/import_content', import_content),

@@ -38,7 +38,7 @@ abbr,acronym{
 \*------------------------------------*/
 html{
 	font-family:Cambria, Georgia, serif;
-	font-size:100%; /* 16px */
+	font-size:16px;
 	background:#fff;
 	color:#333;
 	height:101%;
@@ -249,6 +249,24 @@ ul.query_result li a:hover{
 	text-decoration:underline;
 	cursor:pointer;
 }
+table#preferences tr.header {
+	background-color:#e95c52;
+	color:white;
+	font-size:12px;
+	font-weight:bold;
+	text-transform:uppercase;
+}
+table#preferences tr td {
+	padding:2px 5px 2px 5px;
+	text-align:center;
+}
+table#preferences tr.data td.foodtype {
+	text-align:left;
+}
+table#preferences td.weekday {
+	width:50px;
+}
+
 
 /*------------------------------------*\
 	IPHONE

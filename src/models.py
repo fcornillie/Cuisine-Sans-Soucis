@@ -21,6 +21,15 @@ class User(db.Model):
 	_is_admin = db.BooleanProperty(default=False)
 	
 	@property
+	def preferences(self):
+		if FoodType.all().count() != self._preferences.count():
+			for ft in FoodType.all():
+				if self._preferences.filter("foodtype", ft).count()==0:
+					preference = Preference(user=self, foodtype=ft)
+					preference.put()
+		return self._preferences
+	
+	@property
 	def is_admin(self):
 		return self._is_admin
 		
@@ -70,6 +79,13 @@ class Recipe(db.Model):
 
 class FoodType(db.Model):
 	name = db.CategoryProperty()
+	
+class Preference(db.Model):
+	user = db.ReferenceProperty(User, collection_name="_preferences")
+	foodtype = db.ReferenceProperty(FoodType)
+	like = db.BooleanProperty(default=False)
+	allergic = db.BooleanProperty(default=False)
+	weekdays = db.ListProperty(int)
 	
 class Ingredient(db.Model):
 	name = db.StringProperty()
