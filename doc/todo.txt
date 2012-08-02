@@ -23,6 +23,7 @@ cookery agent
 - entry form
 + validate input
 + foodtype on entry form
++ ingredients in separate classes, so that conversions can be done, calculations for N people/guests
 
 - list
 + favourite
@@ -44,6 +45,7 @@ v 'type' in results list
 v multiple per day
 
 - planner
++ list contraints (time for preparation, time for cooking)
 
 - profile
 + privacy: who can see my schedule? (friends, everyone, nobody)
@@ -60,6 +62,9 @@ V authentication through FB Connect
 + validation of cooking & preparation time
 + FB like / Plus +1
 + leaderboard?
+
+- other features
++ question generation: does [RECIPE] include [INGREDIENT] ?
 
 - styling
 v iphone home button
